@@ -1,14 +1,16 @@
-From b7fb2b85547118d7dda33fd51772c816ce5c0dc7 Mon Sep 17 00:00:00 2001
-From: karim_adli <karimri@protonmail.com>
-Date: Fri, 20 Feb 2026 22:21:33 +0300
-Subject: [PATCH 5/8] wineboot: Add WINEBOOT_HIDE_DIALOG environment variable
+From 1e1762ed397c4425bcd742d0583407d8aaa6a9c2 Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Tue, 4 Aug 2026 20:43:46 +0200
+Subject: [PATCH 5/6] wineboot: Add WINEBOOT_HIDE_DIALOG environment variable
 
+Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/10154
+Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  programs/wineboot/wineboot.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/programs/wineboot/wineboot.c b/programs/wineboot/wineboot.c
-index aa91d01..730025d 100644
+index aa91d01c92f..e0ab8b5c13c 100644
 --- a/programs/wineboot/wineboot.c
 +++ b/programs/wineboot/wineboot.c
 @@ -1531,7 +1531,9 @@ static HWND show_wait_window(void)
@@ -18,10 +20,10 @@ index aa91d01..730025d 100644
 -    ShowWindow( hwnd, SW_SHOWNORMAL );
 +    WCHAR *hide = _wgetenv( L"WINEBOOT_HIDE_DIALOG" );
 +    if (hide == NULL)
-+    	ShowWindow( hwnd, SW_SHOWNORMAL );
++        ShowWindow( hwnd, SW_SHOWNORMAL );
      return hwnd;
  }
  
 -- 
-2.54.0
+2.55.0
 

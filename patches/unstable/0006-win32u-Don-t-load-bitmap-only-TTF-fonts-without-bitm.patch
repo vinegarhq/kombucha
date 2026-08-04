@@ -1,18 +1,17 @@
-From 4055b826a616eeca205f8aa758b3b4f6af758cd3 Mon Sep 17 00:00:00 2001
-From: effectsbot <eff3ctsb0t@gmail.com>
-Date: Fri, 27 Feb 2026 23:55:05 +0100
-Subject: [PATCH 6/8] win32u: Don't load bitmap only TTF fonts without bitmap
+From 8d69906c823306f0e6d375efc60e1e2f14f39f76 Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Tue, 4 Aug 2026 20:36:17 +0200
+Subject: [PATCH 6/6] win32u: Don't load bitmap only TTF fonts without bitmap
  table.
 
-Rebased against 739ca45017f7385340d82c9f8c35716ca6466473 from Paul Gofman's original patch.
-
-Signed-off-by: effectsbot <eff3ctsb0t@gmail.com>
+Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/411
+Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/win32u/freetype.c | 19 ++++++++++++++++++-
  1 file changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/win32u/freetype.c b/dlls/win32u/freetype.c
-index 832043a..19269fb 100644
+index 832043abaa3..19269fb0e3e 100644
 --- a/dlls/win32u/freetype.c
 +++ b/dlls/win32u/freetype.c
 @@ -189,6 +189,8 @@ MAKE_FUNCPTR(FcStrSetMember);
@@ -56,5 +55,5 @@ index 832043a..19269fb 100644
      }
      else
 -- 
-2.54.0
+2.55.0
 

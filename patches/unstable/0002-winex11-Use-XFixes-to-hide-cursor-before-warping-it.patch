@@ -1,12 +1,13 @@
-From 1e9001f5dcc8b217ccf4a178e526e4a52895a43e Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Tue, 25 Jul 2023 10:38:35 +0200
-Subject: [PATCH 3/8] winex11: Use XFixes to hide cursor before warping it.
+From 41c323d9ab5ee022ec7d81b8b18e7e8deee5f98c Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Tue, 4 Aug 2026 20:19:49 +0200
+Subject: [PATCH 2/6] winex11: Use XFixes to hide cursor before warping it.
 
 XWayland only allows warping the cursor if it is not visible. Fixes
 a regression from the periodic cursor sync removal.
 
-Signed-off-by: sewn <sewn@disroot.org>
+Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/7368
+Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/winex11.drv/mouse.c       | 3 +++
  dlls/winex11.drv/x11drv_main.c | 4 ++++
@@ -14,10 +15,10 @@ Signed-off-by: sewn <sewn@disroot.org>
  3 files changed, 9 insertions(+)
 
 diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
-index 5a4d52d..0e1dfdc 100644
+index 7e4d6f9b031..def8216cf70 100644
 --- a/dlls/winex11.drv/mouse.c
 +++ b/dlls/winex11.drv/mouse.c
-@@ -51,6 +51,7 @@ MAKE_FUNCPTR(XcursorLibraryLoadCursor);
+@@ -50,6 +50,7 @@ MAKE_FUNCPTR(XcursorLibraryLoadCursor);
  #define OEMRESOURCE
  
  #include "x11drv.h"
@@ -25,22 +26,22 @@ index 5a4d52d..0e1dfdc 100644
  #include "winreg.h"
  #include "wine/server.h"
  #include "wine/debug.h"
-@@ -1391,8 +1392,10 @@ BOOL X11DRV_SetCursorPos( INT x, INT y )
+@@ -1361,8 +1362,10 @@ BOOL X11DRV_SetCursorPos( INT x, INT y )
          return FALSE;
      }
  
-+    if (use_xfixes && xwayland) pXFixesHideCursor( data->display, root_window );
++    if (use_xfixes) pXFixesHideCursor( data->display, root_window );
      XWarpPointer( data->display, root_window, root_window, 0, 0, 0, 0, pos.x, pos.y );
      data->warp_serial = NextRequest( data->display );
-+    if (use_xfixes && xwayland) pXFixesShowCursor( data->display, root_window );
++    if (use_xfixes) pXFixesShowCursor( data->display, root_window );
  
      if (!clipping_cursor)
          XUngrabPointer( data->display, CurrentTime );
 diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index 6e7940f..e4fc43a 100644
+index eb4142d9f9e..b5aa3119fc7 100644
 --- a/dlls/winex11.drv/x11drv_main.c
 +++ b/dlls/winex11.drv/x11drv_main.c
-@@ -573,11 +573,13 @@ sym_not_found:
+@@ -572,11 +572,13 @@ sym_not_found:
  #ifdef SONAME_LIBXFIXES
  
  #define MAKE_FUNCPTR(f) typeof(f) * p##f;
@@ -54,7 +55,7 @@ index 6e7940f..e4fc43a 100644
  #undef MAKE_FUNCPTR
  
  static void x11drv_load_xfixes(void)
-@@ -598,11 +600,13 @@ static void x11drv_load_xfixes(void)
+@@ -597,11 +599,13 @@ static void x11drv_load_xfixes(void)
          dlclose(xfixes);                                      \
          return;                                               \
      }
@@ -69,7 +70,7 @@ index 6e7940f..e4fc43a 100644
  
      if (!pXFixesQueryExtension(gdi_display, &event, &error))
 diff --git a/dlls/winex11.drv/xfixes.h b/dlls/winex11.drv/xfixes.h
-index f3beea5..6cd4e48 100644
+index f3beea5efed..6cd4e48425b 100644
 --- a/dlls/winex11.drv/xfixes.h
 +++ b/dlls/winex11.drv/xfixes.h
 @@ -27,9 +27,11 @@
@@ -85,5 +86,5 @@ index f3beea5..6cd4e48 100644
  #endif /* defined(SONAME_LIBXFIXES) */
  
 -- 
-2.54.0
+2.55.0
 

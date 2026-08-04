@@ -1,16 +1,16 @@
-From 00a9ca58a24cdba75e9c608f4e082a7afb8bf804 Mon Sep 17 00:00:00 2001
-From: sewn <sewn@disroot.org>
-Date: Sun, 21 Dec 2025 16:55:13 +0300
-Subject: [PATCH 2/8] winex11: Add Xwayland check
+From 2e53d0c57a8f9f28668ad6c5d85ae5a1dc4540f0 Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Tue, 4 Aug 2026 20:24:21 +0200
+Subject: [PATCH 3/6] winex11: Add Xwayland check
 
-Signed-off-by: sewn <sewn@disroot.org>
+Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/winex11.drv/x11drv.h      | 1 +
  dlls/winex11.drv/x11drv_main.c | 3 +++
  2 files changed, 4 insertions(+)
 
 diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
-index aad3918..cc31613 100644
+index d5141eaf730..6bf3fe0fbdc 100644
 --- a/dlls/winex11.drv/x11drv.h
 +++ b/dlls/winex11.drv/x11drv.h
 @@ -484,6 +484,7 @@ extern BOOL use_primary_selection;
@@ -22,18 +22,18 @@ index aad3918..cc31613 100644
  extern BOOL managed_mode;
  extern BOOL private_color_map;
 diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index 40dffc0..6e7940f 100644
+index b5aa3119fc7..e4669c6c7c0 100644
 --- a/dlls/winex11.drv/x11drv_main.c
 +++ b/dlls/winex11.drv/x11drv_main.c
-@@ -69,6 +69,7 @@ BOOL usexvidmode = TRUE;
- BOOL usexrandr = TRUE;
+@@ -70,6 +70,7 @@ BOOL usexrandr = TRUE;
  BOOL usexcomposite = TRUE;
+ BOOL use_xfixes = FALSE;
  BOOL use_egl = TRUE;
 +BOOL xwayland = FALSE;
- BOOL use_xfixes = FALSE;
  BOOL use_take_focus = TRUE;
  BOOL use_primary_selection = FALSE;
-@@ -725,6 +726,8 @@ NTSTATUS __wine_unix_lib_init(void)
+ BOOL use_system_cursors = TRUE;
+@@ -729,6 +730,8 @@ NTSTATUS __wine_unix_lib_init(void)
                     DisplayHeight( display, default_visual.screen ));
      X11DRV_Settings_Init();
  
@@ -43,5 +43,5 @@ index 40dffc0..6e7940f 100644
      X11DRV_XF86VM_Init();
      /* initialize XRandR */
 -- 
-2.54.0
+2.55.0
 
