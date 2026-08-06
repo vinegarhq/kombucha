@@ -1,4 +1,4 @@
-From 41c323d9ab5ee022ec7d81b8b18e7e8deee5f98c Mon Sep 17 00:00:00 2001
+From 8937854f451f524a46d186c851941c05fe8aafb4 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Tue, 4 Aug 2026 20:19:49 +0200
 Subject: [PATCH 2/7] winex11: Use XFixes to hide cursor before warping it.
@@ -15,7 +15,7 @@ Signed-off-by: effects3d <effects3dee@gmail.com>
  3 files changed, 9 insertions(+)
 
 diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
-index 7e4d6f9b031..def8216cf70 100644
+index 7e4d6f9..def8216 100644
 --- a/dlls/winex11.drv/mouse.c
 +++ b/dlls/winex11.drv/mouse.c
 @@ -50,6 +50,7 @@ MAKE_FUNCPTR(XcursorLibraryLoadCursor);
@@ -38,7 +38,7 @@ index 7e4d6f9b031..def8216cf70 100644
      if (!clipping_cursor)
          XUngrabPointer( data->display, CurrentTime );
 diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index eb4142d9f9e..b5aa3119fc7 100644
+index eb4142d..b5aa311 100644
 --- a/dlls/winex11.drv/x11drv_main.c
 +++ b/dlls/winex11.drv/x11drv_main.c
 @@ -572,11 +572,13 @@ sym_not_found:
@@ -70,7 +70,7 @@ index eb4142d9f9e..b5aa3119fc7 100644
  
      if (!pXFixesQueryExtension(gdi_display, &event, &error))
 diff --git a/dlls/winex11.drv/xfixes.h b/dlls/winex11.drv/xfixes.h
-index f3beea5efed..6cd4e48425b 100644
+index f3beea5..6cd4e48 100644
 --- a/dlls/winex11.drv/xfixes.h
 +++ b/dlls/winex11.drv/xfixes.h
 @@ -27,9 +27,11 @@

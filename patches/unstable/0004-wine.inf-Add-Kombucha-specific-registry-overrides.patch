@@ -1,15 +1,15 @@
-From 224f9f8b57bbac18c41821c3759ea2b5054cd92b Mon Sep 17 00:00:00 2001
+From a8444f402e507cfd9d26e9f804ee2f9238eedc30 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Tue, 4 Aug 2026 20:31:20 +0200
+Date: Thu, 6 Aug 2026 14:05:14 +0200
 Subject: [PATCH 4/7] wine.inf: Add Kombucha-specific registry overrides
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
- loader/wine.inf.in | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ loader/wine.inf.in | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
 diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 738e98f4a83..6d6eedcc0ac 100644
+index 738e98f..dd00c73 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
 @@ -63,6 +63,7 @@ AddReg=\
@@ -20,22 +20,35 @@ index 738e98f4a83..6d6eedcc0ac 100644
      LicenseInformation,\
      MCI,\
      Misc,\
-@@ -1343,3 +1344,16 @@ InfFiles  = 17
+@@ -1343,3 +1344,29 @@ InfFiles  = 17
  NlsFiles  = 11
  SortFiles = 10,globalization\sorting
  WinmdFiles = 11,winmetadata
 +
 +[KombuchaOverrides]
 +;; Studio-specific overrides
-+; Use Studio's own version of ucrtbase for deployments using mimalloc to function.
-+; 'native,builtin' allows the native library to fallback to builtin ones for dependencies.
++; Use the msvcrt DLLs that are bundled with Studio for better compatibility.
++; DLLs starting with 'api-ms-win-' cannot be overridden (?).
++; Wine always prefers loading builtin ucrtbase, so the native DLL would have to be copied over to the Wineprefix.
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"api-ms-win-crt-conio-l1-1-0",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"api-ms-win-crt-heap-l1-1-0",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"api-ms-win-crt-locale-l1-1-0",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"api-ms-win-crt-math-l1-1-0",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"api-ms-win-crt-runtime-l1-1-0",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"api-ms-win-crt-stdio-l1-1-0",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"api-ms-win-crt-time-l1-1-0",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"concrt140",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"msvcp140_1",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"msvcp140_2",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"msvcp140",,"native,builtin"
 +HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"ucrtbase",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"vccorlib140",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"vcruntime140_1",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"vcruntime140",,"native,builtin"
 +;; WebView2-specific overrides
-+; Windows versions >=8.1 require DirectComposition, which Wine doesn't support as of 2026-08-04.
-+; The dcomp-DCompositionCreateDevice2 patchset from wine-staging is not to be considered ready for this usecase.
++; DirectComposition is required on Windows versions >=8.1, which Wine doesn't support as of 2026-08-06, so spoof the Windows version to 8.
 +HKCU,Software\Wine\AppDefaults\msedgewebview2.exe,"Version",,"win8"
 +; WebView2 uses Arial as its font, which isn't available by default on Linux, so force it to use Liberation Sans.
-+; Downloading and setting up Arial during runtime creates more complexity, which is unnecessary.
 +HKCU,Software\Wine\Fonts\Replacements,"Arial",,"Liberation Sans"
 -- 
 2.55.0

@@ -1,17 +1,16 @@
-From 4a39203f345e7b3a07f321af0b5a47450eaa5cc7 Mon Sep 17 00:00:00 2001
+From d9fe7fc2fd1be015980fa52df449391c45cd7035 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Wed, 5 Aug 2026 23:04:41 +0200
+Date: Thu, 6 Aug 2026 14:11:25 +0200
 Subject: [PATCH 7/7] ntdll: Keep more LFH block groups alive.
 
-Source:
-https://github.com/ValveSoftware/wine/commit/31d70e4e5db26187763ba7980e38604204d1a971
+Source: https://github.com/ValveSoftware/wine/commit/31d70e4
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/ntdll/heap.c | 10 ++++++++--
  1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
-index feee54e0285..2adca7c5f43 100644
+index feee54e..2adca7c 100644
 --- a/dlls/ntdll/heap.c
 +++ b/dlls/ntdll/heap.c
 @@ -262,6 +262,9 @@ struct bin
