@@ -95,10 +95,10 @@ jobs:
         working-directory: wine
         run: |
           export CC="ccache gcc"
-          export CROSSCC="ccache x86_64-w64-mingw32-gcc"
-          export CROSSCFLAGS="-fno-lto -U_FORTIFY_SOURCE -pipe -msse4.1"
-          export CROSSCFLAGS="${CROSSCFLAGS} ${{ inputs.debug && '-ggdb3 -O0' || '-O3' }}"
-          export CFLAGS="${CROSSCFLAGS} -fcf-protection -fstack-protector-strong -fstack-clash-protection"
+          export x86_64_CC="ccache x86_64-w64-mingw32-gcc"
+          export x86_64_CFLAGS="-fno-lto -U_FORTIFY_SOURCE -pipe -msse4.1"
+          export x86_64_CFLAGS="${x86_64_CFLAGS} ${{ inputs.debug && '-ggdb3 -O0' || '-O3' }}"
+          export CFLAGS="${x86_64_CFLAGS} -fcf-protection -fstack-protector-strong -fstack-clash-protection"
           export LDFLAGS="-Wl,-z,relro"
           mkdir -p ${{ env.INSTALL }}
           ./configure \
