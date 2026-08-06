@@ -137,7 +137,7 @@ jobs:
           rm -rf "${NAME}"/share/{applications,man}
           XZ_OPT=-9 tar -Jcf "${NAME}.tar.xz" "${NAME}"
 
-          echo "${TAG}" | grep -q stable && \
+          echo "${TAG}" | grep -q "^stable" && \
           TAG="${TAG}+$(date --utc +%Y%m%d%H%M%S)" \
           NAME="kombucha-${TAG}" && \
           mv *.tar.xz "${NAME}.tar.xz"
