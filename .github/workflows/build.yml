@@ -99,6 +99,7 @@ jobs:
           export CC="ccache gcc"
           export CXX="ccache g++"
           export x86_64_CFLAGS="-pipe -msse4.1 ${{ inputs.debug && '-ggdb3 -O0' || '-O3' }}"
+          export x86_64_CXXFLAGS="${x86_64_CFLAGS}"
           export CFLAGS="${x86_64_CFLAGS}"
           export CXXFLAGS="${x86_64_CFLAGS}"
           export x86_64_LDFLAGS="-Wl,-O1,--sort-common,--as-needed"
