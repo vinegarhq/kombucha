@@ -1,4 +1,4 @@
-From 0cb390c6c82a778d64d566da76c5da58dd7db0e5 Mon Sep 17 00:00:00 2001
+From 6a4c1e6e3895d794cc9d5f98f6837f9eae9eabdb Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Tue, 4 Aug 2026 20:43:46 +0200
 Subject: [PATCH 5/7] wineboot: Add WINEBOOT_HIDE_DIALOG environment variable

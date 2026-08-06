@@ -1,15 +1,15 @@
-From a8444f402e507cfd9d26e9f804ee2f9238eedc30 Mon Sep 17 00:00:00 2001
+From 6acd36ecff39721c2f8209f270019b421c5bd845 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Thu, 6 Aug 2026 14:05:14 +0200
+Date: Thu, 6 Aug 2026 16:11:06 +0200
 Subject: [PATCH 4/7] wine.inf: Add Kombucha-specific registry overrides
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
- loader/wine.inf.in | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ loader/wine.inf.in | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
 diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 738e98f..dd00c73 100644
+index 738e98f..2dc6ad6 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
 @@ -63,6 +63,7 @@ AddReg=\
@@ -20,13 +20,15 @@ index 738e98f..dd00c73 100644
      LicenseInformation,\
      MCI,\
      Misc,\
-@@ -1343,3 +1344,29 @@ InfFiles  = 17
+@@ -1343,3 +1344,31 @@ InfFiles  = 17
  NlsFiles  = 11
  SortFiles = 10,globalization\sorting
  WinmdFiles = 11,winmetadata
 +
 +[KombuchaOverrides]
 +;; Studio-specific overrides
++; Force HiDPI awareness to fix broken splash screen and docking overlay on DPI values >96.
++HKCU,Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers,"",,"~ HIGHDPIAWARE"
 +; Use the msvcrt DLLs that are bundled with Studio for better compatibility.
 +; DLLs starting with 'api-ms-win-' cannot be overridden (?).
 +; Wine always prefers loading builtin ucrtbase, so the native DLL would have to be copied over to the Wineprefix.
@@ -38,13 +40,13 @@ index 738e98f..dd00c73 100644
 +HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"api-ms-win-crt-stdio-l1-1-0",,"native,builtin"
 +HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"api-ms-win-crt-time-l1-1-0",,"native,builtin"
 +HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"concrt140",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"msvcp140",,"native,builtin"
 +HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"msvcp140_1",,"native,builtin"
 +HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"msvcp140_2",,"native,builtin"
-+HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"msvcp140",,"native,builtin"
 +HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"ucrtbase",,"native,builtin"
 +HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"vccorlib140",,"native,builtin"
-+HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"vcruntime140_1",,"native,builtin"
 +HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"vcruntime140",,"native,builtin"
++HKCU,Software\Wine\AppDefaults\RobloxStudioBeta.exe\DllOverrides,"vcruntime140_1",,"native,builtin"
 +;; WebView2-specific overrides
 +; DirectComposition is required on Windows versions >=8.1, which Wine doesn't support as of 2026-08-06, so spoof the Windows version to 8.
 +HKCU,Software\Wine\AppDefaults\msedgewebview2.exe,"Version",,"win8"

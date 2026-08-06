@@ -1,4 +1,4 @@
-From 6bf2ed723dbc072164b4205321a9583baaeea4b8 Mon Sep 17 00:00:00 2001
+From 1798e609803b3412aa27dacbd2832385757aefb1 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Tue, 4 Aug 2026 20:36:17 +0200
 Subject: [PATCH 6/7] win32u: Don't load bitmap only TTF fonts without bitmap
