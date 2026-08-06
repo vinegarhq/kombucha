@@ -97,7 +97,7 @@ jobs:
           export CC="ccache gcc"
           export CROSSCC="ccache x86_64-w64-mingw32-gcc"
           export CROSSCFLAGS="-fno-lto -U_FORTIFY_SOURCE -pipe -msse4.1 "
-          export CROSSCFLAGS+="${{ inputs.debug && '-g' || '-O2' }}"
+          export CROSSCFLAGS+="${{ inputs.debug && '-ggdb3 -O0' || '-O2' }}"
           export CFLAGS="${CROSSCFLAGS} -fcf-protection -fstack-protector-strong -fstack-clash-protection"
           export CROSSLDFLAGS="-Wl,-O1,--sort-common,--as-needed"
           export LDFLAGS="${CROSSLDFLAGS} -Wl,-z,relro"
