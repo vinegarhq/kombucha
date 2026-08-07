@@ -142,4 +142,5 @@ jobs:
           NAME="kombucha-${TAG}" && \
           mv *.tar.xz "${NAME}.tar.xz" && \
           gh release create --prerelease --generate-notes "${TAG}" "${NAME}.tar.xz" || \
-          gh release upload --clobber "${TAG}" "${NAME}.tar.xz"
+          gh release delete "${TAG}" && \
+          gh release create --prerelease --generate-notes "${TAG}" "${NAME}.tar.xz"
