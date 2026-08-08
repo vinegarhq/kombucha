@@ -1,12 +1,11 @@
-From 997ffdc8af375459476310b45c6c1492ebef47d5 Mon Sep 17 00:00:00 2001
-From: effectsbot <eff3ctsb0t@gmail.com>
-Date: Fri, 27 Feb 2026 23:55:05 +0100
-Subject: [PATCH 7/9] win32u: Don't load bitmap only TTF fonts without bitmap
+From 2cfb96e4de12fad93d2abc84080903edf3afa635 Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Tue, 4 Aug 2026 20:36:17 +0200
+Subject: [PATCH 6/9] win32u: Don't load bitmap only TTF fonts without bitmap
  table.
 
-Rebased against 739ca45017f7385340d82c9f8c35716ca6466473 from Paul Gofman's original patch.
-
-Signed-off-by: effectsbot <eff3ctsb0t@gmail.com>
+Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/411
+Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/win32u/freetype.c | 19 ++++++++++++++++++-
  1 file changed, 18 insertions(+), 1 deletion(-)
@@ -56,5 +55,5 @@ index 832043a..19269fb 100644
      }
      else
 -- 
-2.54.0
+2.55.0
 
