@@ -141,6 +141,6 @@ jobs:
           TAG="${TAG}+$(date --utc +%Y%m%d%H%M%S)" \
           NAME="kombucha-${TAG}" && \
           mv *.tar.xz "${NAME}.tar.xz" && \
-          gh release create --prerelease --generate-notes "${TAG}" "${NAME}.tar.xz" || \
+          gh release create --prerelease --title "${TAG}" "${TAG}" "${NAME}.tar.xz" || \
           gh release delete --cleanup-tag "${TAG}" && \
-          gh release create --prerelease --generate-notes "${TAG}" "${NAME}.tar.xz"
+          gh release create --prerelease --title "${TAG}" "${TAG}" "${NAME}.tar.xz"
