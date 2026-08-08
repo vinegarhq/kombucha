@@ -1,0 +1,43 @@
+From 8a97ba9f3a549d0d659a4c74f6ced1e641b6153e Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Sat, 8 Aug 2026 15:43:20 +0200
+Subject: [PATCH 9/9] server: Always set server persistence to zero seconds
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+I always had some concerns regarding the changes that were made to
+Wineserver persistence in a certain Go library, so I’m overriding this
+option entirely. See this as a little experiment of mine that I might
+revert later.
+
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ server/main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/server/main.c b/server/main.c
+index 46419a0..71ed6a5 100644
+--- a/server/main.c
++++ b/server/main.c
+@@ -44,7 +44,7 @@
+ /* command-line options */
+ int debug_level = 0;
+ int foreground = 0;
+-timeout_t master_socket_timeout = 3 * -TICKS_PER_SEC;  /* master socket timeout, default is 3 seconds */
++timeout_t master_socket_timeout = 0 * -TICKS_PER_SEC;  /* master socket timeout, default is 0 seconds */
+ const char *server_argv0;
+ 
+ /* parse-line args */
+@@ -90,7 +90,7 @@ static void option_callback( int optc, char *optarg )
+         exit( !ret );
+     case 'p':
+         if (optarg && isdigit(*optarg))
+-            master_socket_timeout = (timeout_t)atoi( optarg ) * -TICKS_PER_SEC;
++            master_socket_timeout = (timeout_t)atoi( 0 ) * -TICKS_PER_SEC;
+         else
+             master_socket_timeout = TIMEOUT_INFINITE;
+         break;
+-- 
+2.55.0
+
