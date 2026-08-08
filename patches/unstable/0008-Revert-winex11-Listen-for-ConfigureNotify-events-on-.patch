@@ -1,4 +1,4 @@
-From a2c43a2bd71c0f04d28f5867c3b58312c5a6499e Mon Sep 17 00:00:00 2001
+From 93dc627a1c0717a076f9098ee36a1d105c35cd2f Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Fri, 7 Aug 2026 20:07:25 +0200
 Subject: [PATCH 8/8] Revert "winex11: Listen for ConfigureNotify events on the
