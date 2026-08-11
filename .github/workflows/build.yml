@@ -129,7 +129,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          TAG="${{ inputs.patchset }}${{inputs.debug && '-debug' || '' }}$([ ${{ inputs.patchset }} = stable ] && date --utc ++%Y%m%d%H%M%S)"
+          TAG="${{ inputs.patchset }}${{inputs.debug && '-debug' || '' }}"
+          [ ${{ inputs.patchset }} = stable ] && TAG="${TAG}+$(date --utc +%Y%m%d%H%M%S)"
           NAME="kombucha-${TAG}"
 
           mv "${{ env.INSTALL }}" "${NAME}"
