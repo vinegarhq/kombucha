@@ -1,4 +1,4 @@
-From 8a97ba9f3a549d0d659a4c74f6ced1e641b6153e Mon Sep 17 00:00:00 2001
+From e3cfa45d3aadfe7fb02433ecb63f3753ce5966cf Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sat, 8 Aug 2026 15:43:20 +0200
 Subject: [PATCH 9/9] server: Always set server persistence to zero seconds

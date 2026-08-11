@@ -1,4 +1,4 @@
-From ef1fa6e9c1cc68997ce9aac5c9aaecb017429aad Mon Sep 17 00:00:00 2001
+From 561f6c415838826b648ef993272e263b0babf4e8 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Tue, 4 Aug 2026 20:07:46 +0200
 Subject: [PATCH 1/9] winex11: Move Xfixes extension query to process_attach.
