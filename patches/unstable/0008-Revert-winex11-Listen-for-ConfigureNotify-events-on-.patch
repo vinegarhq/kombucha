@@ -1,7 +1,7 @@
 From dde7f1bebd868005138a68f0a2a9851243ba8447 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Fri, 7 Aug 2026 20:07:25 +0200
-Subject: [PATCH 08/10] Revert "winex11: Listen for ConfigureNotify events on
+Subject: [PATCH 08/11] Revert "winex11: Listen for ConfigureNotify events on
  the virtual desktop."
 
 Fixes a regression with QT menus turning invisible after interacting
