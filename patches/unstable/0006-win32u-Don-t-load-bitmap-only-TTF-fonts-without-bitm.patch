@@ -1,7 +1,7 @@
-From 918ac64923733d389bb9bdde619ee1c642ec355d Mon Sep 17 00:00:00 2001
+From b8be817927d5b711e4c4d2ae94d5fbf95cc75f2a Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Tue, 4 Aug 2026 20:36:17 +0200
-Subject: [PATCH 6/9] win32u: Don't load bitmap only TTF fonts without bitmap
+Subject: [PATCH 06/10] win32u: Don't load bitmap only TTF fonts without bitmap
  table.
 
 Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/411
