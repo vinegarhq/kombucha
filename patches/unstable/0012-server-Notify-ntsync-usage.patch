@@ -1,0 +1,33 @@
+From f8abd170d8c6e49fa58f7384564f435c803ad641 Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Sat, 15 Aug 2026 00:57:07 +0200
+Subject: [PATCH 12/12] server: Notify ntsync usage
+
+Source: https://github.com/ValveSoftware/wine/commit/b62913d
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ server/inproc_sync.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/server/inproc_sync.c b/server/inproc_sync.c
+index 522d9a4..4f6a35d 100644
+--- a/server/inproc_sync.c
++++ b/server/inproc_sync.c
+@@ -47,7 +47,13 @@
+ int get_inproc_device_fd(void)
+ {
+     static int fd = -2;
+-    if (fd == -2) fd = open( "/dev/ntsync", O_CLOEXEC | O_RDONLY );
++    if (fd == -2) {
++        fd = open( "/dev/ntsync", O_CLOEXEC | O_RDONLY );
++
++        if ( fd >= 0 ) {
++            fprintf( stderr, "ntsync: up and running.\n" );
++        }
++    }
+     return fd;
+ }
+ 
+-- 
+2.55.0
+

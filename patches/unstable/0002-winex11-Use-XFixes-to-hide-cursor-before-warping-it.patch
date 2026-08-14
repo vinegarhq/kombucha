@@ -1,7 +1,7 @@
 From 128a1b665ff9853e7b97c40a801661ae970ef93c Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Tue, 4 Aug 2026 20:19:49 +0200
-Subject: [PATCH 02/11] winex11: Use XFixes to hide cursor before warping it.
+Subject: [PATCH 02/12] winex11: Use XFixes to hide cursor before warping it.
 
 XWayland only allows warping the cursor if it is not visible. Fixes
 a regression from the periodic cursor sync removal.

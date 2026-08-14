@@ -1,7 +1,7 @@
 From 02048a33ef714b8f8c5ff03a050106fd637046a8 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sat, 8 Aug 2026 15:43:20 +0200
-Subject: [PATCH 09/11] server: Always set server persistence to zero seconds
+Subject: [PATCH 09/12] server: Always set server persistence to zero seconds
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

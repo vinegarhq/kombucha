@@ -1,7 +1,7 @@
 From 613e07024ebb54d753070af34be477f0c224b9a2 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Fri, 14 Aug 2026 22:33:46 +0200
-Subject: [PATCH 10/11] programs/explorer: Enable virtual desktop shell by
+Subject: [PATCH 10/12] programs/explorer: Enable virtual desktop shell by
  default
 
 Signed-off-by: effects3d <effects3dee@gmail.com>

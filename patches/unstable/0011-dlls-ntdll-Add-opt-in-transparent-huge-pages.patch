@@ -1,7 +1,7 @@
 From bf20d45af6e3dce6e297c8a80ea519a4e70f960c Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Fri, 14 Aug 2026 22:50:19 +0200
-Subject: [PATCH 11/11] dlls/ntdll: Add opt-in transparent huge pages
+Subject: [PATCH 11/12] dlls/ntdll: Add opt-in transparent huge pages
 
 Source: https://github.com/bottlesdevs/wine/commit/69d56ca
 Signed-off-by: effects3d <effects3dee@gmail.com>
