@@ -6,6 +6,7 @@ on:
         type: choice
         options:
           - stable
+          - proton-unstable
           - unstable
       debug:
         type: boolean
@@ -82,7 +83,8 @@ jobs:
 
       - name: Fetch Sources
         run: |
-          git clone https://gitlab.winehq.org/wine/wine.git --depth 1 \
+          [ ${{ inputs.patchset }} = proton-unstable ] && PART="hub.com/ValveSoftware" || PART="lab.winehq.org/wine"
+          git clone https://git${PART}/wine.git --depth 1 \
             --revision=${{ inputs.commit }}
 
       - name: Apply Patches
@@ -105,13 +107,17 @@ jobs:
           export x86_64_LDFLAGS="-Wl,-O1,--sort-common,--as-needed"
           export LDFLAGS="${x86_64_LDFLAGS} -Wl,-z,relro,-z,now"
           mkdir -p ${{ env.INSTALL }}
+          [ ${{ inputs.patchset }} = proton-unstable ] && ./autogen.sh
           ./configure \
             --disable-tests \
             --disable-win16 \
             --enable-archs=x86_64 \
             --prefix=${{ env.INSTALL }} \
             --with-mingw \
-            --without-oss
+            --without-ffmpeg \
+            --without-gstreamer \
+            --without-oss \
+            --without-opencl
 
       - name: Configure Ccache
         uses: hendrikmuhs/ccache-action@v1.2
@@ -137,5 +143,5 @@ jobs:
           rm -rf "${NAME}"/share/{applications,man}
           XZ_OPT=-9 tar -Jcf "${NAME}.tar.xz" "${NAME}"
 
-          [ ${{ inputs.patchset }} = unstable ] && gh release delete --cleanup-tag "${TAG}"
+          [ ${{ inputs.patchset }} != stable ] && gh release delete --cleanup-tag "${TAG}"
           gh release create --notes "Built from Wine commit ${{ inputs.commit }}." --prerelease --title "${TAG}" "${TAG}" "${NAME}.tar.xz"
