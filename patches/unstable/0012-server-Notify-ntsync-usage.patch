@@ -1,7 +1,7 @@
-From f8abd170d8c6e49fa58f7384564f435c803ad641 Mon Sep 17 00:00:00 2001
+From b6f34a43efc7652f61ca6205db60293e2d641fb3 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sat, 15 Aug 2026 00:57:07 +0200
-Subject: [PATCH 12/12] server: Notify ntsync usage
+Subject: [PATCH 12/13] server: Notify ntsync usage
 
 Source: https://github.com/ValveSoftware/wine/commit/b62913d
 Signed-off-by: effects3d <effects3dee@gmail.com>

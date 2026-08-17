@@ -1,7 +1,7 @@
-From 8f570d12aab2f4b530dcbfc9032ebb5bf2887971 Mon Sep 17 00:00:00 2001
+From 69587ba0e88cc5a9b0cdb36ce3691cdf1aad8fea Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Thu, 6 Aug 2026 14:11:25 +0200
-Subject: [PATCH 07/12] ntdll: Keep more LFH block groups alive.
+Subject: [PATCH 07/13] ntdll: Keep more LFH block groups alive.
 
 Source: https://github.com/ValveSoftware/wine/commit/31d70e4
 Signed-off-by: effects3d <effects3dee@gmail.com>
