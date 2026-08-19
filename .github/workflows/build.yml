@@ -38,8 +38,6 @@ jobs:
             gettext \
             git \
             libasound2-dev \
-            libavcodec-dev \
-            libavformat-dev \
             libcapi20-dev \
             libcups2-dev \
             libfontconfig-dev \
@@ -47,8 +45,6 @@ jobs:
             libgl-dev \
             libgnutls28-dev \
             libgphoto2-dev \
-            libgstreamer1.0-dev \
-            libgstreamer-plugins-base1.0-dev \
             libkrb5-dev \
             libpcap-dev \
             libpcsclite-dev \
