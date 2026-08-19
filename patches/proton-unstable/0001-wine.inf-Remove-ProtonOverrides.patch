@@ -1,0 +1,113 @@
+From cd3f81fb62b98fd8c4bd4dfde16dcc294563427c Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Wed, 19 Aug 2026 13:08:10 +0200
+Subject: [PATCH 1/7] wine.inf: Remove ProtonOverrides
+
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ loader/wine.inf.in | 85 ----------------------------------------------
+ 1 file changed, 85 deletions(-)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 5ace722fd63..8d229aa7a51 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -70,7 +70,6 @@ AddReg=\
+     TTS, \
+     OLE,\
+     Printing,\
+-    ProtonOverrides,\
+     Services, \
+     SessionMgr,\
+     SteamClient,\
+@@ -1459,87 +1458,3 @@ HKLM,Software\Microsoft\Speech_OneCore\Voices\Tokens\ProtonTTS_libritts-r_14\Att
+ HKLM,Software\Microsoft\Speech_OneCore\Voices\Tokens\ProtonTTS_libritts-r_14\Attributes,"Gender",,"Female"
+ HKLM,Software\Microsoft\Speech_OneCore\Voices\Tokens\ProtonTTS_libritts-r_14\Attributes,"Age",,"Adult"
+ HKLM,Software\Microsoft\Speech_OneCore\Voices\Tokens\ProtonTTS_libritts-r_14\Attributes,"Vendor",,"Wine"
+-
+-[ProtonOverrides]
+-;;Likely want *80 and *90 too, but those require removing Wine's manifest files.
+-HKCU,Software\Wine\DllOverrides,"atl100",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"msvcp100",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"msvcr100",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"vcomp100",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"atl110",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"msvcp110",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"msvcr110",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"vcomp110",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"atl120",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"msvcp120",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"msvcr120",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"vcomp120",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-conio-l1-1-0",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-heap-l1-1-0",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-locale-l1-1-0",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-math-l1-1-0",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-runtime-l1-1-0",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-stdio-l1-1-0",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-time-l1-1-0",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"atl140",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"concrt140",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"msvcp140",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"msvcp140_1",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"msvcp140_2",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"msvcp140_atomic_wait",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"msvcp140_codecvt_ids",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"msvcr140",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"ucrtbase",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"vcomp140",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"vcruntime140",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"vccorlib140",0x2,"native,builtin"
+-HKCU,Software\Wine\DllOverrides,"atiadlxx",,"disabled"
+-HKCU,Software\Wine\DllOverrides,"nvcuda",0x2,"disabled"
+-HKCU,Software\Wine\DllOverrides,"vcruntime140_1",0x2,"native,builtin"
+-HKLM,Software\Wow6432Node\Valve\Steam\Apps\CommonRedist\.NET\4.8,"4.8",0x10001,1
+-HKLM,Software\Wow6432Node\Valve\Steam\Apps\CommonRedist\.NET\4.7.2,"4.7.2",0x10001,1
+-HKLM,Software\Wow6432Node\Valve\Steam\Apps\CommonRedist\.NET\4.6.2,"4.6.2",0x10001,1
+-HKLM,Software\Wow6432Node\Valve\Steam\Apps\CommonRedist\.NET\4.5.2,"4.5.2",0x10001,1
+-HKLM,Software\Wow6432Node\Valve\Steam\Apps\CommonRedist\.NET\4.0,"4.0",0x10001,1
+-HKLM,Software\Wow6432Node\Valve\Steam\Apps\CommonRedist\.NET\4.0 Client Profile,"4.0 Client Profile",0x10001,1
+-HKLM,Software\Wow6432Node\Valve\Steam\Apps\CommonRedist\.NET\3.5,"3.5",0x10001,1
+-HKLM,Software\Wow6432Node\Valve\Steam\Apps\CommonRedist\.NET\3.5 Client Profile,"3.5 Client Profile",0x10001,1
+-HKLM,Software\Wow6432Node\Valve\Steam\Apps\CommonRedist\XNA\4.0,"4.0",0x10001,1
+-HKCU,Software\Wine\AppDefaults\ShadowOfWar.exe\DllOverrides,"amd_ags_x64",,"disabled"
+-HKCU,Software\Wine\AppDefaults\TDUSC.exe\DllOverrides,"xinput1_3",,"native,builtin"
+-HKCU,Software\Wine\AppDefaults\WRCG.exe\DllOverrides,"xinput1_3",,"native,builtin"
+-;;App-specific overrides for atiadlxx.dll.
+-HKCU,Software\Wine\AppDefaults\s2_sp64_ship.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\s2_mp64_ship.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\h1_sp64_ship.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\h1_mp64_ship.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\iw7_ship.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\BlackOps3.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\NFS16.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\ShadowOfWar.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\DIRT5.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\Paradox Launcher.exe\DllOverrides,,4,
+-HKCU,Software\Wine\AppDefaults\gotg.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\RelicCardinal.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\msedgewebview2.exe,"Version",,"win7"
+-HKCU,Software\Wine\AppDefaults\Imperiums.exe,"Version",,"win11"
+-HKCU,Software\Wine\AppDefaults\Avengers.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\starwarssquadrons.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\GW2.Main_Win64_Retail.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\Spider-Man.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\RiftApart.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\ffxvi.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\ffxvi_demo.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\FarCryNewDawn.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\FarCry5.exe\DllOverrides,"atiadlxx",,"builtin"
+-HKCU,Software\Wine\AppDefaults\rayne1.exe\DllOverrides,"d3d8",,"native"
+-HKCU,Software\Wine\AppDefaults\rayne2.exe\DllOverrides,"d3d8",,"native"
+-HKLM,Software\Wow6432Node\lucasarts entertainment company llc\Star Wars: Episode I Racer\v1.0,"Display Height",0x10001,480
+-HKLM,Software\Wow6432Node\lucasarts entertainment company llc\Star Wars: Episode I Racer\v1.0,"Display Width",0x10001,640
+-HKCU,Software\Wine\AppDefaults\RDR2.exe\DllOverrides,"vulkan-1",,"native"
+-HKCU,Software\Wine\AppDefaults\ActOfWar.exe,"Version",,"winxp"
+-HKCU,Software\Wine\AppDefaults\DarkOmen.exe,"Version",,"winxp"
+-HKLM,Software\Khronos\OpenXR\1,"ActiveRuntime",,"C:\openxr\wineopenxr64.json"
+-;;Other app-specific overrides
+-HKCU,Software\Wine\AppDefaults\Pentiment.exe\DllOverrides,"SpeechSynthesisWrapper",4,
+-HKCU,Software\Wine\AppDefaults\Maine-Win64-Shipping.exe\DllOverrides,"SpeechSynthWrapper",4,
+-- 
+2.55.0
+

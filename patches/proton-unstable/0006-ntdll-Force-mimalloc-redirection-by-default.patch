@@ -1,0 +1,37 @@
+From 0f83c9baaf91eec9a2d9edbc83de2c5b8a3b778e Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Wed, 19 Aug 2026 13:31:42 +0200
+Subject: [PATCH 6/7] ntdll: Force mimalloc redirection by default
+
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ dlls/ntdll/unix/loader.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index f67fa07d366..2a3d53aa405 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -2284,6 +2284,11 @@ BOOL alert_simulate_sched_quantum;
+ BOOL fsync_simulate_sched_quantum;
+ BOOL fsync_yield_to_waiters;
+ 
++static void mimalloc_force_redirect(void)
++{
++    setenv( "MIMALLOC_FORCE_REDIRECT", "1", 0 );
++}
++
+ static void hacks_init(void)
+ {
+     const char *sgi = getenv( "SteamGameId" );
+@@ -2443,6 +2448,7 @@ static void start_main_thread(void)
+     signal_init_threading();
+     dbg_init();
+     startup_info_size = server_init_process();
++    mimalloc_force_redirect();
+     hacks_init();
+     virtual_map_user_shared_data();
+     init_cpu_info();
+-- 
+2.55.0
+

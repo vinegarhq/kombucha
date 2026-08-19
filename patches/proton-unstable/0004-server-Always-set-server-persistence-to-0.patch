@@ -1,0 +1,34 @@
+From 5a9b72b1cea1dac50953f1a019b774dccafa9af8 Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Wed, 19 Aug 2026 13:25:45 +0200
+Subject: [PATCH 4/7] server: Always set server persistence to 0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+I always had some concerns regarding the changes that were made to
+Wineserver persistence in a certain Go library, so I’m overriding this
+option entirely. See this as a little experiment of mine that I might
+revert later.
+
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ server/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/main.c b/server/main.c
+index 7f6912bc01b..06b728ea293 100644
+--- a/server/main.c
++++ b/server/main.c
+@@ -93,7 +93,7 @@ static void option_callback( int optc, char *optarg )
+         exit( !ret );
+     case 'p':
+         if (optarg && isdigit(*optarg))
+-            master_socket_timeout = (timeout_t)atoi( optarg ) * -TICKS_PER_SEC;
++            master_socket_timeout = (timeout_t)atoi( 0 );
+         else
+             master_socket_timeout = TIMEOUT_INFINITE;
+         break;
+-- 
+2.55.0
+

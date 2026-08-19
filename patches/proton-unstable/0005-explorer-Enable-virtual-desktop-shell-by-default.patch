@@ -1,0 +1,28 @@
+From 470c636b3ed56298daecef3f35e18a60e423ac28 Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Wed, 19 Aug 2026 13:27:46 +0200
+Subject: [PATCH 5/7] explorer: Enable virtual desktop shell by default
+
+This should work regardless of the virtual desktop name.
+
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ programs/explorer/desktop.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/programs/explorer/desktop.c b/programs/explorer/desktop.c
+index 1a2b1e2f575..2c83965e126 100644
+--- a/programs/explorer/desktop.c
++++ b/programs/explorer/desktop.c
+@@ -928,7 +928,7 @@ static BOOL get_default_enable_shell( const WCHAR *name )
+         RegCloseKey( hkey );
+     }
+     /* Default off, except for the magic desktop name "shell" */
+-    if (!found) result = (lstrcmpiW( name, L"shell" ) == 0);
++    if (!found) result = TRUE;
+     return result;
+ }
+ 
+-- 
+2.55.0
+
