@@ -104,6 +104,7 @@ jobs:
           export LDFLAGS="${x86_64_LDFLAGS} -Wl,-z,relro,-z,now"
           mkdir -p ${{ env.INSTALL }}
           [ ${{ inputs.patchset }} = proton-unstable ] && ./autogen.sh
+          [ ${{ inputs.patchset }} = unstable ] && ./tools/make_requests
           ./configure \
             --disable-tests \
             --disable-win16 \
