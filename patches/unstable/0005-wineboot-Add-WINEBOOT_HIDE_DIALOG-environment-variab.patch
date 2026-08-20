@@ -1,4 +1,4 @@
-From c810c00339df58a210706a90746427b37c2ec60a Mon Sep 17 00:00:00 2001
+From 888c9ddb7f1a4df789d1ff3e4f56b9054d499ab5 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Tue, 4 Aug 2026 20:43:46 +0200
 Subject: [PATCH 05/13] wineboot: Add WINEBOOT_HIDE_DIALOG environment variable
@@ -10,7 +10,7 @@ Signed-off-by: effects3d <effects3dee@gmail.com>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/programs/wineboot/wineboot.c b/programs/wineboot/wineboot.c
-index b49ad3c..ffd8b24 100644
+index b49ad3c005c..ffd8b24c1d5 100644
 --- a/programs/wineboot/wineboot.c
 +++ b/programs/wineboot/wineboot.c
 @@ -1549,7 +1549,9 @@ static HWND show_wait_window(void)
