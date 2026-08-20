@@ -1,7 +1,7 @@
-From 5a9b72b1cea1dac50953f1a019b774dccafa9af8 Mon Sep 17 00:00:00 2001
+From 5043307275edacae0a9dedbb653ed66940e2c537 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Wed, 19 Aug 2026 13:25:45 +0200
-Subject: [PATCH 4/7] server: Always set server persistence to 0
+Subject: [PATCH 4/8] server: Always set server persistence to 0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

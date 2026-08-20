@@ -1,7 +1,7 @@
-From d6a28caa0e4df9425771f96e00d928207f4cf765 Mon Sep 17 00:00:00 2001
+From 8266c5bc266dd6c0a1a2e30537bb0f8192f3acc9 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Wed, 19 Aug 2026 13:39:22 +0200
-Subject: [PATCH 7/7] Revert "HACK: proton: advapi32: Use steamuser as Wine
+Subject: [PATCH 7/8] Revert "HACK: proton: advapi32: Use steamuser as Wine
  username."
 
 Prevents issues with the Wineprefix when switching from or to normal
