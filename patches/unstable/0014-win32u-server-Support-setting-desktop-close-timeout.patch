@@ -1,0 +1,141 @@
+From 90db98dc891eff93853b2a5e33321f8b39a00ae0 Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Thu, 20 Aug 2026 23:24:56 +0200
+Subject: [PATCH 14/14] win32u, server: Support setting desktop close timeout.
+
+And use zero timeout by default.
+
+Source: https://github.com/ValveSoftware/wine/commit/65fa09d
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ dlls/win32u/winstation.c | 27 ++++++++++++++++++++++++---
+ server/protocol.def      |  3 +++
+ server/user.h            |  1 +
+ server/winstation.c      |  4 +++-
+ 4 files changed, 31 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/win32u/winstation.c b/dlls/win32u/winstation.c
+index 3c55a80c5e1..8c63c862340 100644
+--- a/dlls/win32u/winstation.c
++++ b/dlls/win32u/winstation.c
+@@ -771,6 +771,8 @@ BOOL WINAPI NtUserGetObjectInformation( HANDLE handle, INT index, void *info,
+     }
+ }
+ 
++#define TICKSPERSEC  10000000
++
+ /***********************************************************************
+  *           NtUserSetObjectInformation   (win32u.@)
+  */
+@@ -778,8 +780,19 @@ BOOL WINAPI NtUserSetObjectInformation( HANDLE handle, INT index, void *info, DW
+ {
+     BOOL ret;
+     const USEROBJECTFLAGS *obj_flags = info;
++    LONG64 close_timeout = 0;
+ 
+-    if (index != UOI_FLAGS || !info || len < sizeof(*obj_flags))
++    if (index == 1000)
++    {
++        /* Wine specific: set desktop close timeout. */
++        if (!info || len < sizeof(DWORD))
++        {
++            RtlSetLastWin32Error( ERROR_INVALID_PARAMETER );
++            return FALSE;
++        }
++        close_timeout = -(*(DWORD *)info * (ULONG64)TICKSPERSEC / 1000);
++    }
++    else if (index != UOI_FLAGS || !info || len < sizeof(*obj_flags))
+     {
+         RtlSetLastWin32Error( ERROR_INVALID_PARAMETER );
+         return FALSE;
+@@ -788,8 +801,16 @@ BOOL WINAPI NtUserSetObjectInformation( HANDLE handle, INT index, void *info, DW
+     SERVER_START_REQ( set_user_object_info )
+     {
+         req->handle    = wine_server_obj_handle( handle );
+-        req->flags     = SET_USER_OBJECT_SET_FLAGS;
+-        req->obj_flags = obj_flags->dwFlags;
++        if (index == 1000)
++        {
++            req->flags = SET_USER_OBJECT_SET_CLOSE_TIMEOUT;
++            req->close_timeout = close_timeout;
++        }
++        else
++        {
++            req->flags     = SET_USER_OBJECT_SET_FLAGS;
++            req->obj_flags = obj_flags->dwFlags;
++        }
+         ret = !wine_server_call_err( req );
+     }
+     SERVER_END_REQ;
+diff --git a/server/protocol.def b/server/protocol.def
+index a9be0a16eb6..c705e3c0b2b 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3102,6 +3102,7 @@ enum coords_relative
+     obj_handle_t handle;          /* handle to the object */
+     unsigned int flags;           /* information to set/get */
+     unsigned int obj_flags;       /* new object flags */
++    timeout_t    close_timeout;   /* desktop close timeout */
+ @REPLY
+     int          is_desktop;      /* is object a desktop? */
+     unsigned int old_obj_flags;   /* old object flags */
+@@ -3109,6 +3110,7 @@ enum coords_relative
+ @END
+ #define SET_USER_OBJECT_SET_FLAGS       1
+ #define SET_USER_OBJECT_GET_FULL_NAME   2
++#define SET_USER_OBJECT_SET_CLOSE_TIMEOUT 4
+ 
+ 
+ /* Register a hotkey */
+@@ -3873,6 +3875,7 @@ struct handle_info
+ /* Make the current process a system process */
+ @REQ(make_process_system)
+     obj_handle_t handle;          /* handle to the process */
++    timeout_t    desktop_close_timeout; /* set timeout for desktop close */
+ @REPLY
+     obj_handle_t event;           /* event signaled when all user processes have exited */
+ @END
+diff --git a/server/user.h b/server/user.h
+index 117d95fa7b3..f6ed9308e45 100644
+--- a/server/user.h
++++ b/server/user.h
+@@ -78,6 +78,7 @@ struct desktop
+     struct list          hotkeys;          /* list of registered hotkeys */
+     struct list          pointers;         /* list of active pointers */
+     struct timeout_user *close_timeout;    /* timeout before closing the desktop */
++    timeout_t            close_timeout_val;/* timeout duration before closing desktop */
+     struct thread_input *foreground_input; /* thread input of foreground thread */
+     process_id_t         foreground_pid;   /* id of the foreground process */
+     unsigned int         users;            /* processes and threads using this desktop */
+diff --git a/server/winstation.c b/server/winstation.c
+index d27adc3ecb4..a8c3f347aa2 100644
+--- a/server/winstation.c
++++ b/server/winstation.c
+@@ -277,6 +277,7 @@ static bool desktop_init( struct object *obj, const void *init_data )
+     desktop->taskman_window = NULL;
+     desktop->global_hooks = NULL;
+     desktop->close_timeout = NULL;
++    desktop->close_timeout_val = 0;
+     desktop->foreground_input = NULL;
+     desktop->foreground_pid = 0;
+     desktop->users = 0;
+@@ -423,7 +424,7 @@ static void remove_desktop_user( struct desktop *desktop, struct thread *thread
+ 
+     /* if we have one remaining user, it has to be the manager of the desktop window */
+     if ((process = get_top_window_owner( desktop )) && desktop->users == process->running_threads && !desktop->close_timeout)
+-        desktop->close_timeout = add_timeout_user( -TICKS_PER_SEC, close_desktop_timeout, desktop );
++        desktop->close_timeout = add_timeout_user( desktop->close_timeout_val, close_desktop_timeout, desktop );
+ }
+ 
+ /* remove a thread from the list of threads attached to a desktop */
+@@ -886,6 +887,7 @@ DECL_HANDLER(set_user_object_info)
+             }
+             SHARED_WRITE_END;
+         }
++        if (req->flags & SET_USER_OBJECT_SET_CLOSE_TIMEOUT) desktop->close_timeout_val = req->close_timeout;
+     }
+     else if (obj->ops == &winstation_ops)
+     {
+-- 
+2.55.0
+

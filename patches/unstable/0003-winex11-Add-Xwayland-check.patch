@@ -1,7 +1,7 @@
 From f9f7f3b2dd970a5230e503e21a3c35621c366a0f Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Tue, 4 Aug 2026 20:24:21 +0200
-Subject: [PATCH 03/13] winex11: Add Xwayland check
+Subject: [PATCH 03/14] winex11: Add Xwayland check
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---

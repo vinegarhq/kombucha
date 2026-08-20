@@ -1,7 +1,7 @@
 From 27b065b8744e79b98ae22c6508b7042db6b435ba Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Thu, 20 Aug 2026 17:39:37 +0200
-Subject: [PATCH 12/13] ntdll: Force redirecting memory allocation calls to
+Subject: [PATCH 12/14] ntdll: Force redirecting memory allocation calls to
  mimalloc
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
