@@ -1,0 +1,46 @@
+From 27b065b8744e79b98ae22c6508b7042db6b435ba Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Thu, 20 Aug 2026 17:39:37 +0200
+Subject: [PATCH 12/14] ntdll: Force redirecting memory allocation calls to
+ mimalloc
+
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ dlls/ntdll/unix/loader.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index 0d43c5c65e3..29a086538e1 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -1855,6 +1855,19 @@ static ULONG_PTR get_image_address(void)
+     return 0;
+ }
+ 
++/***********************************************************************
++ *           mimalloc_force_redirect
++ *
++ * Force redirecting memory allocation calls to mimalloc, ignoring
++ * initialization order errors.
++ *
++ * This is a hack and not a proper solution.
++ */
++static void mimalloc_force_redirect(void)
++{
++    setenv( "MIMALLOC_FORCE_REDIRECT", "1", 0 );
++}
++
+ /***********************************************************************
+  *           start_main_thread
+  */
+@@ -1864,6 +1877,7 @@ static void start_main_thread(void)
+ 
+     dbg_init();
+     startup_info_size = server_init_process();
++    mimalloc_force_redirect();
+     virtual_map_user_shared_data();
+     init_cpu_info();
+     init_files();
+-- 
+2.55.0
+

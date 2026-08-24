@@ -1,8 +1,8 @@
-From 93dc627a1c0717a076f9098ee36a1d105c35cd2f Mon Sep 17 00:00:00 2001
+From aaef8fa9380b4a3c5d29ef66bcb60003cc74b072 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Fri, 7 Aug 2026 20:07:25 +0200
-Subject: [PATCH 8/9] Revert "winex11: Listen for ConfigureNotify events on the
- virtual desktop."
+Subject: [PATCH 08/14] Revert "winex11: Listen for ConfigureNotify events on
+ the virtual desktop."
 
 Fixes a regression with QT menus turning invisible after interacting
 with a child window inside the virtual desktop. Annoyingly enough,
@@ -17,7 +17,7 @@ Signed-off-by: effects3d <effects3dee@gmail.com>
  2 files changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winex11.drv/desktop.c b/dlls/winex11.drv/desktop.c
-index 703ab98..7437208 100644
+index 703ab98b7aa..743720804f8 100644
 --- a/dlls/winex11.drv/desktop.c
 +++ b/dlls/winex11.drv/desktop.c
 @@ -74,7 +74,7 @@ BOOL X11DRV_CreateDesktop( const WCHAR *name, UINT width, UINT height )
@@ -30,10 +30,10 @@ index 703ab98..7437208 100644
  
      if (default_visual.visual != DefaultVisual( display, DefaultScreen(display) ))
 diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index cbc6f0c..bfece4c 100644
+index f269041150c..ebeabdcc465 100644
 --- a/dlls/winex11.drv/window.c
 +++ b/dlls/winex11.drv/window.c
-@@ -1474,6 +1474,9 @@ static void window_set_config( struct x11drv_win_data *data, RECT rect, BOOL abo
+@@ -1468,6 +1468,9 @@ static void window_set_config( struct x11drv_win_data *data, RECT rect, BOOL abo
      TRACE( "window %p/%lx, requesting config %s mask %#x above %u, serial %lu\n", data->hwnd, data->whole_window,
             wine_dbgstr_rect(new_rect), mask, above, data->configure_serial );
      XReconfigureWMWindow( data->display, data->whole_window, data->vis.screen, mask, &changes );
@@ -43,7 +43,7 @@ index cbc6f0c..bfece4c 100644
  }
  
  /***********************************************************************
-@@ -1751,7 +1754,6 @@ static UINT window_update_client_config( struct x11drv_win_data *data )
+@@ -1745,7 +1748,6 @@ static UINT window_update_client_config( struct x11drv_win_data *data )
      UINT flags;
  
      if (!data->managed) return 0; /* unmanaged windows are managed by the Win32 side */

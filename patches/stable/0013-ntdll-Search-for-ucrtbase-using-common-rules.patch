@@ -1,0 +1,41 @@
+From 8f92f4752c30d7c7754ff4b4af1e7b1370714fcb Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Thu, 20 Aug 2026 17:58:28 +0200
+Subject: [PATCH 13/14] ntdll: Search for ucrtbase using common rules.
+
+Source: https://github.com/ValveSoftware/wine/commit/d9e1c67
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ dlls/ntdll/loader.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index a0992cf68d3..739761dad8a 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -2769,6 +2769,7 @@ static NTSTATUS open_known_dll( const WCHAR *libname, UNICODE_STRING *nt_name, W
+     OBJECT_ATTRIBUTES attr;
+ 
+     if (!known_dlls_ntdir) return STATUS_DLL_NOT_FOUND;
++    if (libname && !_wcsicmp( libname, L"ucrtbase.dll" )) return STATUS_DLL_NOT_FOUND;
+     RtlInitUnicodeString( &str, libname );
+     InitializeObjectAttributes( &attr, &str, OBJ_CASE_INSENSITIVE, known_dlls_ntdir, NULL );
+     if ((status = NtOpenSection( mapping, MAXIMUM_ALLOWED, &attr ))) return status;
+@@ -3295,7 +3296,14 @@ static NTSTATUS find_dll_file( const WCHAR *load_path, const WCHAR *libname, UNI
+ 
+         if (status == STATUS_SUCCESS)
+         {
++            static const WCHAR ucrtbase[] = L"ucrtbase.dll";
++            unsigned int len;
++
+             TRACE ("found %s for %s\n", debugstr_w(fullname), debugstr_w(libname) );
++            len = wcslen( fullname );
++            if (len > ARRAY_SIZE(ucrtbase) - 1 && !_wcsicmp( fullname + len - (ARRAY_SIZE(ucrtbase) - 1), ucrtbase )
++                && (*pwm = find_basename_module( ucrtbase )))
++                return STATUS_SUCCESS;
+             libname = fullname;
+         }
+         else
+-- 
+2.55.0
+

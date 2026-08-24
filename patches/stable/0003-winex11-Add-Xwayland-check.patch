@@ -1,7 +1,7 @@
-From f4caa6adfd529b1619c7dc82f2cb3aa65df2471a Mon Sep 17 00:00:00 2001
+From f9f7f3b2dd970a5230e503e21a3c35621c366a0f Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Tue, 4 Aug 2026 20:24:21 +0200
-Subject: [PATCH 3/9] winex11: Add Xwayland check
+Subject: [PATCH 03/14] winex11: Add Xwayland check
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
@@ -10,10 +10,10 @@ Signed-off-by: effects3d <effects3dee@gmail.com>
  2 files changed, 4 insertions(+)
 
 diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
-index 27aa1cc..1c75e69 100644
+index abfbfda62a2..0c85a3b45ff 100644
 --- a/dlls/winex11.drv/x11drv.h
 +++ b/dlls/winex11.drv/x11drv.h
-@@ -484,6 +484,7 @@ extern BOOL use_primary_selection;
+@@ -486,6 +486,7 @@ extern BOOL use_primary_selection;
  extern BOOL use_system_cursors;
  extern BOOL grab_fullscreen;
  extern BOOL usexcomposite;
@@ -22,7 +22,7 @@ index 27aa1cc..1c75e69 100644
  extern BOOL managed_mode;
  extern BOOL private_color_map;
 diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index b5aa311..e4669c6 100644
+index b5aa3119fc7..e4669c6c7c0 100644
 --- a/dlls/winex11.drv/x11drv_main.c
 +++ b/dlls/winex11.drv/x11drv_main.c
 @@ -70,6 +70,7 @@ BOOL usexrandr = TRUE;
