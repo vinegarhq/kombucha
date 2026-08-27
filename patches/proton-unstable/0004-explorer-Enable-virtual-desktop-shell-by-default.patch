@@ -1,9 +1,7 @@
-From 8150a2babc0f221d458689e757fcd1e8eb8250d6 Mon Sep 17 00:00:00 2001
+From 55759251ea614b0b00af2a61f0fbf1fac8a6ddb7 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Wed, 19 Aug 2026 13:27:46 +0200
-Subject: [PATCH 5/8] explorer: Enable virtual desktop shell by default
-
-This should work regardless of the virtual desktop name.
+Date: Thu, 27 Aug 2026 00:04:40 +0200
+Subject: [PATCH 4/9] explorer: Enable virtual desktop shell by default
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---

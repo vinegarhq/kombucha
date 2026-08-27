@@ -1,20 +1,24 @@
-From 4a0c59072ddf9e3b8593e14dc471fdfb0f7d2386 Mon Sep 17 00:00:00 2001
+From e20ac714a949820660e9aa10aad03c791df7caa9 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Wed, 19 Aug 2026 13:22:16 +0200
-Subject: [PATCH 3/8] Revert "winex11: Listen for ConfigureNotify events on the
- virtual desktop."
+Date: Thu, 27 Aug 2026 00:29:12 +0200
+Subject: [PATCH 3/9] =?UTF-8?q?Partially=20revert=20=E2=80=9Cwinex11:=20Li?=
+ =?UTF-8?q?sten=20for=20ConfigureNotify=20events=20on=20the=20virtual=20de?=
+ =?UTF-8?q?sktop.=E2=80=9D?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Fixes a regression with QT menus turning invisible after interacting
-with a child window inside the virtual desktop. Annoyingly enough,
-there's still a chance of that occuring, but it should be a lot less
-frequent now.
+Reverts a regression with Qt menus turning invisible after interacting
+with a child window in virtual desktop mode. Annoyingly enough, there’s
+still a chance of that occuring, but it should be a lot less frequent
+now.
 
 Source: https://gitlab.winehq.org/wine/wine/-/commit/06b1a49f
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/winex11.drv/desktop.c | 2 +-
- dlls/winex11.drv/window.c  | 5 ++++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ dlls/winex11.drv/window.c  | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/winex11.drv/desktop.c b/dlls/winex11.drv/desktop.c
 index 3c223d66b9b..406f5194fba 100644
@@ -30,7 +34,7 @@ index 3c223d66b9b..406f5194fba 100644
  
      if (default_visual.visual != DefaultVisual( display, DefaultScreen(display) ))
 diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index ce37a4c4d5e..2712ec8921b 100644
+index ce37a4c4d5e..3fdfe3b15d5 100644
 --- a/dlls/winex11.drv/window.c
 +++ b/dlls/winex11.drv/window.c
 @@ -1633,6 +1633,10 @@ static void window_set_config( struct x11drv_win_data *data, RECT rect, BOOL abo
@@ -44,14 +48,6 @@ index ce37a4c4d5e..2712ec8921b 100644
      if (mask & (CWWidth | CWHeight)) clear_emulated_fullscreen_padding( data );
  
      if (net_wm_state != -1) window_set_net_wm_state( data, net_wm_state );
-@@ -2014,7 +2018,6 @@ static UINT window_update_client_config( struct x11drv_win_data *data )
-     UINT flags;
- 
-     if (!data->managed) return 0; /* unmanaged windows are managed by the Win32 side */
--    if (is_virtual_desktop()) return 0; /* ignore window manager config changes in virtual desktop mode */
-     if (data->desired_state.wm_state != NormalState) return 0; /* ignore config changes on invisible/minimized windows */
- 
-     if (data->wm_state_serial) return 0; /* another WM_STATE update is pending, wait for it to complete */
 -- 
 2.55.0
 

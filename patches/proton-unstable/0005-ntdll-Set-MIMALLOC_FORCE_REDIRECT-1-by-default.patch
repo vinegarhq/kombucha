@@ -1,30 +1,32 @@
-From 23762f07ed5585966353186dad5d63a444c7ecaf Mon Sep 17 00:00:00 2001
+From 42863d56e268ccfe22b7e064eddd8e9b9c4a2a57 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Wed, 19 Aug 2026 13:31:42 +0200
-Subject: [PATCH 6/8] ntdll: Force mimalloc redirection by default
+Date: Thu, 27 Aug 2026 00:51:09 +0200
+Subject: [PATCH 5/9] ntdll: Set MIMALLOC_FORCE_REDIRECT=1 by default
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
- dlls/ntdll/unix/loader.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ dlls/ntdll/unix/loader.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
-index f67fa07d366..2a3d53aa405 100644
+index f67fa07d366..2fe89207609 100644
 --- a/dlls/ntdll/unix/loader.c
 +++ b/dlls/ntdll/unix/loader.c
-@@ -2284,6 +2284,11 @@ BOOL alert_simulate_sched_quantum;
+@@ -2284,6 +2284,13 @@ BOOL alert_simulate_sched_quantum;
  BOOL fsync_simulate_sched_quantum;
  BOOL fsync_yield_to_waiters;
  
 +static void mimalloc_force_redirect(void)
 +{
-+    setenv( "MIMALLOC_FORCE_REDIRECT", "1", 0 );
++    if (!getenv("MIMALLOC_FORCE_REDIRECT")) {
++        setenv("MIMALLOC_FORCE_REDIRECT", "1", 0 );
++    }
 +}
 +
  static void hacks_init(void)
  {
      const char *sgi = getenv( "SteamGameId" );
-@@ -2443,6 +2448,7 @@ static void start_main_thread(void)
+@@ -2443,6 +2450,7 @@ static void start_main_thread(void)
      signal_init_threading();
      dbg_init();
      startup_info_size = server_init_process();

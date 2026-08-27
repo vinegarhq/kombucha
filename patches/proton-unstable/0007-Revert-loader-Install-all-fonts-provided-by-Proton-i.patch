@@ -1,18 +1,21 @@
-From 568bab60d2ae7aebff65ca3cd1e24a6511482a62 Mon Sep 17 00:00:00 2001
+From b56d23a02d8dc880ce94286f51cc143a91fcc06e Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Thu, 20 Aug 2026 16:19:12 +0200
-Subject: [PATCH 8/8] Revert "loader: Install all fonts provided by Proton in
+Date: Thu, 27 Aug 2026 00:36:51 +0200
+Subject: [PATCH 7/9] Revert "loader: Install all fonts provided by Proton in
  the registry."
 
-Fixes WebView2 not displaying content.
+We're only using the downstream fork of Wine used in Proton, so we can't
+install these fonts. This also reverts a regression with WebView2 not
+functioning.
 
+Source: https://github.com/ValveSoftware/wine/commit/31b56a9
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  loader/wine.inf.in | 14 ++------------
  1 file changed, 2 insertions(+), 12 deletions(-)
 
 diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 87b17e1a910..35b0844808f 100644
+index 1ee588c2572..5bf3c2955a8 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
 @@ -540,24 +540,14 @@ HKLM,%FontSubStr%,"Times New Roman TUR,162",,"Times New Roman,162"

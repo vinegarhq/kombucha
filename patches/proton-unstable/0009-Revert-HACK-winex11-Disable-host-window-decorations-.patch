@@ -1,0 +1,34 @@
+From 9b5cf571e783f10c216c3bb7cebf6ab7aa2628b2 Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Thu, 27 Aug 2026 11:51:30 +0200
+Subject: [PATCH 9/9] =?UTF-8?q?Revert=20=E2=80=9CHACK:=20winex11:=20Disabl?=
+ =?UTF-8?q?e=20host=20window=20decorations=20with=20Mutter.=E2=80=9D?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Studio doesn’t change its window decorations at any point in time, so
+it’s best to revert this to avoid having a Win95-esq title bar on GNOME.
+
+Source: https://github.com/ValveSoftware/wine/commit/20bf0d4
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ dlls/winex11.drv/window.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 3fdfe3b15d5..662ea622bb5 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -534,8 +534,6 @@ static unsigned long get_mwm_decorations_for_style( DWORD style, DWORD ex_style
+ {
+     unsigned long ret = 0;
+ 
+-    if (X11DRV_HasWindowManager( "Mutter" )) return 0;
+-
+     if (ex_style & WS_EX_TOOLWINDOW) return 0;
+     if (ex_style & WS_EX_LAYERED) return 0;
+ 
+-- 
+2.55.0
+

@@ -1,12 +1,13 @@
-From 8266c5bc266dd6c0a1a2e30537bb0f8192f3acc9 Mon Sep 17 00:00:00 2001
+From e4d3bca5e2504e8bc316cb5cc4c7a784f4d1432c Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Wed, 19 Aug 2026 13:39:22 +0200
-Subject: [PATCH 7/8] Revert "HACK: proton: advapi32: Use steamuser as Wine
+Date: Thu, 27 Aug 2026 00:27:31 +0200
+Subject: [PATCH 6/9] Revert "HACK: proton: advapi32: Use steamuser as Wine
  username."
 
-Prevents issues with the Wineprefix when switching from or to normal
-Kombucha.
+Prevents issues with the Wine prefix username when switching to or away
+from Proton.
 
+Source: https://github.com/ValveSoftware/wine/commit/59b20e8
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/advapi32/advapi.c | 34 ++++++++++++++++------------------
