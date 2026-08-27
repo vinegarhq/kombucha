@@ -1,9 +1,9 @@
 From e20ac714a949820660e9aa10aad03c791df7caa9 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Thu, 27 Aug 2026 00:29:12 +0200
-Subject: [PATCH 3/9] =?UTF-8?q?Partially=20revert=20=E2=80=9Cwinex11:=20Li?=
- =?UTF-8?q?sten=20for=20ConfigureNotify=20events=20on=20the=20virtual=20de?=
- =?UTF-8?q?sktop.=E2=80=9D?=
+Subject: [PATCH 03/10] =?UTF-8?q?Partially=20revert=20=E2=80=9Cwinex11:=20?=
+ =?UTF-8?q?Listen=20for=20ConfigureNotify=20events=20on=20the=20virtual=20?=
+ =?UTF-8?q?desktop.=E2=80=9D?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

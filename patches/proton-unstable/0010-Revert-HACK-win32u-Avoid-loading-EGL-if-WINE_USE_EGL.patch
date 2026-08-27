@@ -1,0 +1,37 @@
+From ccae40e183a220487152337d1f1089aba34a27c5 Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Thu, 27 Aug 2026 15:52:16 +0200
+Subject: [PATCH 10/10] Revert "HACK: win32u: Avoid loading EGL if
+ WINE_USE_EGL=0."
+
+Reverts a regression with WineD3D performance, due to GLX being used for
+OpenGL rendering under winex11.
+
+Source: https://github.com/ValveSoftware/wine/commit/c3202e9
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ dlls/win32u/opengl.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/dlls/win32u/opengl.c b/dlls/win32u/opengl.c
+index 03346f5b5f6..7c91f8fac92 100644
+--- a/dlls/win32u/opengl.c
++++ b/dlls/win32u/opengl.c
+@@ -1433,13 +1433,7 @@ static const struct opengl_driver_funcs egldrv_funcs =
+ static BOOL egl_init( const struct opengl_driver_funcs **driver_funcs )
+ {
+     struct opengl_funcs *funcs = &display_funcs;
+-    const char *extensions, *env;
+-
+-    if (!(env = getenv( "WINE_USE_EGL" )) || !atoi( env ))
+-    {
+-        WARN( "EGL support is disabled.\n" );
+-        return FALSE;
+-    }
++    const char *extensions;
+ 
+     if (!(funcs->egl_handle = dlopen( SONAME_LIBEGL, RTLD_NOW | RTLD_GLOBAL )))
+     {
+-- 
+2.55.0
+

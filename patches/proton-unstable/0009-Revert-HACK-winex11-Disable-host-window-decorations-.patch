@@ -1,8 +1,8 @@
 From 9b5cf571e783f10c216c3bb7cebf6ab7aa2628b2 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Thu, 27 Aug 2026 11:51:30 +0200
-Subject: [PATCH 9/9] =?UTF-8?q?Revert=20=E2=80=9CHACK:=20winex11:=20Disabl?=
- =?UTF-8?q?e=20host=20window=20decorations=20with=20Mutter.=E2=80=9D?=
+Subject: [PATCH 09/10] =?UTF-8?q?Revert=20=E2=80=9CHACK:=20winex11:=20Disa?=
+ =?UTF-8?q?ble=20host=20window=20decorations=20with=20Mutter.=E2=80=9D?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

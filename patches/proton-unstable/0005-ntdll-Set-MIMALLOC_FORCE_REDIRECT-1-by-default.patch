@@ -1,7 +1,7 @@
 From 42863d56e268ccfe22b7e064eddd8e9b9c4a2a57 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Thu, 27 Aug 2026 00:51:09 +0200
-Subject: [PATCH 5/9] ntdll: Set MIMALLOC_FORCE_REDIRECT=1 by default
+Subject: [PATCH 05/10] ntdll: Set MIMALLOC_FORCE_REDIRECT=1 by default
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---

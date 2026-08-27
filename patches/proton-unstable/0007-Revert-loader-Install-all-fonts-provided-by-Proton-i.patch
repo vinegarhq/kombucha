@@ -1,7 +1,7 @@
 From b56d23a02d8dc880ce94286f51cc143a91fcc06e Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Thu, 27 Aug 2026 00:36:51 +0200
-Subject: [PATCH 7/9] Revert "loader: Install all fonts provided by Proton in
+Subject: [PATCH 07/10] Revert "loader: Install all fonts provided by Proton in
  the registry."
 
 We're only using the downstream fork of Wine used in Proton, so we can't
