@@ -1,7 +1,11 @@
-From 888c9ddb7f1a4df789d1ff3e4f56b9054d499ab5 Mon Sep 17 00:00:00 2001
+From 3b82a68fcdebd8ca7234b56178fa6e501258b567 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Tue, 4 Aug 2026 20:43:46 +0200
-Subject: [PATCH 05/14] wineboot: Add WINEBOOT_HIDE_DIALOG environment variable
+Date: Sun, 30 Aug 2026 15:38:27 +0200
+Subject: [PATCH 04/13] wineboot: Add WINEBOOT_HIDE_DIALOG environment variable
+
+Required for hiding Wine's boot dialog during Vinegar's preparation
+process. As of 2026-08-30, this is worked around by killing the Wine
+server before the boot dialog gets a chance to appear.
 
 Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/10154
 Signed-off-by: effects3d <effects3dee@gmail.com>

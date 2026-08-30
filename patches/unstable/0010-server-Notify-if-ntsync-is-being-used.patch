@@ -1,9 +1,9 @@
-From da4dba3abf86a3d5d6a714dca9bbc3dc92dfab31 Mon Sep 17 00:00:00 2001
+From 69d7f16cf2833672219b2c084f098830a253bca8 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Thu, 20 Aug 2026 17:52:30 +0200
-Subject: [PATCH 11/14] server: Notify if ntsync is being used
+Date: Sun, 30 Aug 2026 22:11:15 +0200
+Subject: [PATCH 10/13] server: Notify if ntsync is being used
 
-Source: https://github.com/ValveSoftware/wine/commit/b62913d
+Source: Proton-Wine commit: b62913d8cab7be7452678d252295c96cdcf3f5a6
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  server/inproc_sync.c | 8 +++++++-

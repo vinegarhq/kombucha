@@ -1,0 +1,37 @@
+From 82b6203526e32a6f9ef253f438faa6d7aa56d975 Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Sun, 30 Aug 2026 16:45:30 +0200
+Subject: [PATCH 07/13] Partially revert "winex11: Listen for ConfigureNotify
+ events on the virtual desktop."
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Reverts a regression with Roblox Studio's pull-down menus turning
+invisible after interacting with a child window in virtual desktop mode.
+Annoyingly enough, there’s still a chance of that occuring, but it
+should be a lot less frequent now.
+
+Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/8161
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ dlls/winex11.drv/window.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index d7df0a85199..ef5b96a3aef 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -1468,6 +1468,9 @@ static void window_set_config( struct x11drv_win_data *data, RECT rect, BOOL abo
+     TRACE( "window %p/%lx, requesting config %s mask %#x above %u, serial %lu\n", data->hwnd, data->whole_window,
+            wine_dbgstr_rect(new_rect), mask, above, data->configure_serial );
+     XReconfigureWMWindow( data->display, data->whole_window, data->vis.screen, mask, &changes );
++
++    /* don't expect a ConfigureNotify while window is unmapped */
++    if (data->pending_state.wm_state == WithdrawnState) data->configure_serial = 0;
+ }
+ 
+ /***********************************************************************
+-- 
+2.55.0
+

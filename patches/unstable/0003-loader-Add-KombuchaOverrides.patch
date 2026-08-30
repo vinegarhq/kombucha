@@ -1,0 +1,48 @@
+From a98d474c165f21ca724ba931d19fd92fd5a7180d Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Sun, 30 Aug 2026 15:15:37 +0200
+Subject: [PATCH 03/13] loader: Add KombuchaOverrides
+
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ loader/wine.inf.in | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 965d3b261c2..22086265810 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -63,6 +63,7 @@ AddReg=\
+     Debugger,\
+     DirectX,\
+     Fonts,\
++    KombuchaOverrides,\
+     LicenseInformation,\
+     MCI,\
+     Misc,\
+@@ -1355,3 +1356,22 @@ InfFiles  = 17
+ NlsFiles  = 11
+ SortFiles = 10,globalization\sorting
+ WinmdFiles = 11,winmetadata
++
++[KombuchaOverrides]
++; Prefer loading native msvcrt DLLs bundled with Studio and WebView2 for better compatibility with Wine.
++; DLLs starting with 'api-ms-win-' cannot be overridden and are therefore not included.
++; Upstream Wine refuses to load native ucrtbase, unless it's copied over to the Wine prefix. The downstream fork of Wine used in Proton includes a patch that addresses this.
++HKCU,Software\Wine\DllOverrides,"concrt140",0x2,"native,builtin"
++HKCU,Software\Wine\DllOverrides,"msvcp140",0x2,"native,builtin"
++HKCU,Software\Wine\DllOverrides,"msvcp140_1",0x2,"native,builtin"
++HKCU,Software\Wine\DllOverrides,"msvcp140_2",0x2,"native,builtin"
++HKCU,Software\Wine\DllOverrides,"msvcp140_codecvt_ids",0x2,"native,builtin"
++HKCU,Software\Wine\DllOverrides,"ucrtbase",0x2,"native,builtin"
++HKCU,Software\Wine\DllOverrides,"vccorlib140",0x2,"native,builtin"
++HKCU,Software\Wine\DllOverrides,"vcruntime140",0x2,"native,builtin"
++HKCU,Software\Wine\DllOverrides,"vcruntime140_1",0x2,"native,builtin"
++; WebView2 requires DirectComposition on Windows versions >=8.1, which Wine doesn't support, so spoof the Windows version to 8.
++; As of 2026-08-30, the dcomp-DCompositionCreateDevice2 patchset in Wine Staging causes WebView2 to always flicker when the Creator Store tab isn't selected.
++HKCU,Software\Wine\AppDefaults\msedgewebview2.exe,"Version",0x2,"win8"
++; WebView2 uses Arial as its font, which is proprietary and doesn't come pre-installed on most Linux distributions, so force it to use Liberation Sans.
++HKCU,Software\Wine\Fonts\Replacements,"Arial",0x2,"Liberation Sans
+-- 
+2.55.0
+

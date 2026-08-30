@@ -1,9 +1,12 @@
-From 8f92f4752c30d7c7754ff4b4af1e7b1370714fcb Mon Sep 17 00:00:00 2001
+From 438341288d3a98c83da459a2cc104031c9400b29 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Thu, 20 Aug 2026 17:58:28 +0200
-Subject: [PATCH 13/14] ntdll: Search for ucrtbase using common rules.
+Date: Sun, 30 Aug 2026 22:12:37 +0200
+Subject: [PATCH 12/13] ntdll: HACK: Search for ucrtbase using common rules.
 
-Source: https://github.com/ValveSoftware/wine/commit/d9e1c67
+Fixes versions of Roblox Studio that ship mimalloc from crashing with
+MIMALLOC_VERBOSE=3 set.
+
+Source: Proton-Wine commit: d9e1c67bc93c8af2247cab1d0c17e491127a5a1b
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/ntdll/loader.c | 8 ++++++++

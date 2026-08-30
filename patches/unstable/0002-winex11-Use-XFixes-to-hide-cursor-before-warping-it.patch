@@ -1,12 +1,15 @@
-From 6e8fccb8fba938b857fbc05d12e500ec47773e3c Mon Sep 17 00:00:00 2001
+From cd200b3fb6de1c10224268cf260d7e4e15bc4e8f Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Tue, 4 Aug 2026 20:19:49 +0200
-Subject: [PATCH 02/14] winex11: Use XFixes to hide cursor before warping it.
+Date: Sun, 30 Aug 2026 21:53:21 +0200
+Subject: [PATCH 02/13] winex11: Use XFixes to hide cursor before warping it.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-XWayland only allows warping the cursor if it is not visible. Fixes
-a regression from the periodic cursor sync removal.
+Fixes cursor not being warped when panning Roblox Studio’s viewport
+camera under Xwayland.
 
-Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/7368
+Source: Proton-Wine commit: 3946d2fe5e9b0a31223eccce0f05ff7b34e2f92a
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/winex11.drv/mouse.c       | 3 +++
@@ -15,7 +18,7 @@ Signed-off-by: effects3d <effects3dee@gmail.com>
  3 files changed, 9 insertions(+)
 
 diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
-index f9d849dfd70..0ae6abde58b 100644
+index f9d849dfd70..cf6c56d3997 100644
 --- a/dlls/winex11.drv/mouse.c
 +++ b/dlls/winex11.drv/mouse.c
 @@ -50,6 +50,7 @@ MAKE_FUNCPTR(XcursorLibraryLoadCursor);
@@ -30,15 +33,15 @@ index f9d849dfd70..0ae6abde58b 100644
          return FALSE;
      }
  
-+    if (use_xfixes) pXFixesHideCursor( data->display, root_window );
++    pXFixesHideCursor( data->display, root_window );
      XWarpPointer( data->display, root_window, root_window, 0, 0, 0, 0, pos.x, pos.y );
      data->warp_serial = NextRequest( data->display );
-+    if (use_xfixes) pXFixesShowCursor( data->display, root_window );
++    pXFixesShowCursor( data->display, root_window );
  
      if (!clipping_cursor)
          XUngrabPointer( data->display, CurrentTime );
 diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index eb4142d9f9e..b5aa3119fc7 100644
+index 40dffc03901..82f93ddf0ff 100644
 --- a/dlls/winex11.drv/x11drv_main.c
 +++ b/dlls/winex11.drv/x11drv_main.c
 @@ -572,11 +572,13 @@ sym_not_found:

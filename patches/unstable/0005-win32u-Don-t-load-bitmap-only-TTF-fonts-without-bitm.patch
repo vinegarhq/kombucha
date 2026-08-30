@@ -1,10 +1,15 @@
-From 231f4447be153fc16a6589b3721001a00516aa88 Mon Sep 17 00:00:00 2001
+From 938250eb2df061302dd74cf4b82cf106bd33438b Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Tue, 4 Aug 2026 20:36:17 +0200
-Subject: [PATCH 06/14] win32u: Don't load bitmap only TTF fonts without bitmap
- table.
+Date: Sun, 30 Aug 2026 21:57:53 +0200
+Subject: [PATCH 05/13] =?UTF-8?q?win32u:=20Don=E2=80=99t=20load=20bitmap?=
+ =?UTF-8?q?=20only=20TTF=20fonts=20without=20bitmap=20table.?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/411
+Fixes Roblox Studio crashing when trying to display emojis.
+
+Source: Proton-Wine commit: 4bc6c30aa6481268558b37de827e9aa997578ca8
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/win32u/freetype.c | 19 ++++++++++++++++++-

@@ -1,9 +1,13 @@
-From 48989eee34eb9df388e065a537d54e8023dde8c5 Mon Sep 17 00:00:00 2001
+From 620a6e2287c80f6587082ffa114f42bae418bdb0 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Tue, 4 Aug 2026 20:07:46 +0200
-Subject: [PATCH 01/14] winex11: Move Xfixes extension query to process_attach.
+Date: Sun, 30 Aug 2026 21:47:42 +0200
+Subject: [PATCH 01/13] winex11.drv: Move Xfixes extension query to
+ process_attach.
 
-Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/7368
+Required by "winex11: Use XFixes to hide cursor before warping it."
+patch.
+
+Source: Proton-Wine commit: da191cf0169fa02a952a4886615a6cca36d0e6e6
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/winex11.drv/clipboard.c   | 26 ++------------
@@ -72,10 +76,10 @@ index e2e07a636a4..0bdc8bc9038 100644
      TRACE("xfixes succesully initialized\n");
  #else
 diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
-index a91c0e74c02..abfbfda62a2 100644
+index 3d0c7ddbd4c..8e6309cc655 100644
 --- a/dlls/winex11.drv/x11drv.h
 +++ b/dlls/winex11.drv/x11drv.h
-@@ -486,12 +486,14 @@ extern BOOL use_primary_selection;
+@@ -485,12 +485,14 @@ extern BOOL use_primary_selection;
  extern BOOL use_system_cursors;
  extern BOOL grab_fullscreen;
  extern BOOL usexcomposite;
@@ -91,7 +95,7 @@ index a91c0e74c02..abfbfda62a2 100644
  extern Display *clipboard_display;
  
 diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index 39b23ffe0ec..eb4142d9f9e 100644
+index 39b23ffe0ec..40dffc03901 100644
 --- a/dlls/winex11.drv/x11drv_main.c
 +++ b/dlls/winex11.drv/x11drv_main.c
 @@ -46,6 +46,7 @@
@@ -102,14 +106,14 @@ index 39b23ffe0ec..eb4142d9f9e 100644
  #include "wine/server.h"
  #include "wine/debug.h"
  #include "wine/list.h"
-@@ -67,6 +68,7 @@ Window root_window;
- BOOL usexvidmode = TRUE;
+@@ -68,6 +69,7 @@ BOOL usexvidmode = TRUE;
  BOOL usexrandr = TRUE;
  BOOL usexcomposite = TRUE;
-+BOOL use_xfixes = FALSE;
  BOOL use_egl = TRUE;
++BOOL use_xfixes = FALSE;
  BOOL use_take_focus = TRUE;
  BOOL use_primary_selection = FALSE;
+ BOOL use_system_cursors = TRUE;
 @@ -81,6 +83,7 @@ BOOL shape_layered_windows = TRUE;
  int copy_default_colors = 128;
  int alloc_system_colors = 256;

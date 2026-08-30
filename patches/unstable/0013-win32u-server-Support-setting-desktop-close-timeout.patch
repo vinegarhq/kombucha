@@ -1,11 +1,11 @@
-From 90db98dc891eff93853b2a5e33321f8b39a00ae0 Mon Sep 17 00:00:00 2001
+From 8257cc9a14fdb2ac5b164813f3c10aa87c8a54ac Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Thu, 20 Aug 2026 23:24:56 +0200
-Subject: [PATCH 14/14] win32u, server: Support setting desktop close timeout.
+Date: Sun, 30 Aug 2026 22:13:46 +0200
+Subject: [PATCH 13/13] win32u, server: Support setting desktop close timeout.
 
-And use zero timeout by default.
+Should decrease the time for virtual desktop to close.
 
-Source: https://github.com/ValveSoftware/wine/commit/65fa09d
+Source: Proton-Wine commit: 65fa09de3c0633653efbcefb8be066bae9cf4fcd
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/win32u/winstation.c | 27 ++++++++++++++++++++++++---
@@ -96,7 +96,7 @@ index a9be0a16eb6..c705e3c0b2b 100644
      obj_handle_t event;           /* event signaled when all user processes have exited */
  @END
 diff --git a/server/user.h b/server/user.h
-index 117d95fa7b3..f6ed9308e45 100644
+index f1a1f07df66..2d00d87b5e2 100644
 --- a/server/user.h
 +++ b/server/user.h
 @@ -78,6 +78,7 @@ struct desktop
@@ -108,7 +108,7 @@ index 117d95fa7b3..f6ed9308e45 100644
      process_id_t         foreground_pid;   /* id of the foreground process */
      unsigned int         users;            /* processes and threads using this desktop */
 diff --git a/server/winstation.c b/server/winstation.c
-index d27adc3ecb4..a8c3f347aa2 100644
+index e2aad1edeb1..92181ad599b 100644
 --- a/server/winstation.c
 +++ b/server/winstation.c
 @@ -277,6 +277,7 @@ static bool desktop_init( struct object *obj, const void *init_data )

@@ -1,22 +1,18 @@
-From ab4cc6ba3dda28a7d0b06139a62391b2b7ed1b2a Mon Sep 17 00:00:00 2001
+From 751432481563cbf0cfb7afd0d0ed051e72e4c90a Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
-Date: Thu, 20 Aug 2026 17:46:47 +0200
-Subject: [PATCH 09/14] server: Always set server persistence to 0 seconds
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date: Sun, 30 Aug 2026 16:57:40 +0200
+Subject: [PATCH 08/13] server: Add environment variable for forcing
+ persistence to 0 seconds
 
-I always had some concerns regarding the changes that were made to
-Wineserver persistence in a certain Go library, so I’m overriding this
-option entirely.
+Opt-in workaround for https://github.com/vinegarhq/vinegar/issues/779.
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
- server/main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ server/main.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/server/main.c b/server/main.c
-index 46419a09cb4..6c9765d866a 100644
+index 46419a09cb4..40bf137fa85 100644
 --- a/server/main.c
 +++ b/server/main.c
 @@ -44,7 +44,7 @@
@@ -28,12 +24,16 @@ index 46419a09cb4..6c9765d866a 100644
  const char *server_argv0;
  
  /* parse-line args */
-@@ -90,7 +90,7 @@ static void option_callback( int optc, char *optarg )
+@@ -90,7 +90,11 @@ static void option_callback( int optc, char *optarg )
          exit( !ret );
      case 'p':
          if (optarg && isdigit(*optarg))
 -            master_socket_timeout = (timeout_t)atoi( optarg ) * -TICKS_PER_SEC;
-+            master_socket_timeout = (timeout_t)atoi( 0 );
++            if (getenv("WINESERVER_NO_PERSISTENT")) {
++                master_socket_timeout = (timeout_t)atoi( 0 );
++            } else {
++                master_socket_timeout = (timeout_t)atoi( optarg ) * -TICKS_PER_SEC;
++            }
          else
              master_socket_timeout = TIMEOUT_INFINITE;
          break;

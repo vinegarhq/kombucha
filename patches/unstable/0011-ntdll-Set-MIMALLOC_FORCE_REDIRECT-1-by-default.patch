@@ -1,0 +1,41 @@
+From b120a107939ee20eb788f2cc159f2a1504f02714 Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Sun, 30 Aug 2026 17:13:24 +0200
+Subject: [PATCH 11/13] ntdll: Set MIMALLOC_FORCE_REDIRECT=1 by default
+
+Fixes versions of Roblox Studio that ship mimalloc from crashing.
+
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ dlls/ntdll/unix/loader.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index 0d43c5c65e3..4d7f718b643 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -1855,6 +1855,13 @@ static ULONG_PTR get_image_address(void)
+     return 0;
+ }
+ 
++static void mimalloc_force_redirect(void)
++{
++    if (!getenv("MIMALLOC_FORCE_REDIRECT")) {
++        setenv("MIMALLOC_FORCE_REDIRECT", "1", 0 );
++    }
++}
++
+ /***********************************************************************
+  *           start_main_thread
+  */
+@@ -1864,6 +1871,7 @@ static void start_main_thread(void)
+ 
+     dbg_init();
+     startup_info_size = server_init_process();
++    mimalloc_force_redirect();
+     virtual_map_user_shared_data();
+     init_cpu_info();
+     init_files();
+-- 
+2.55.0
+
