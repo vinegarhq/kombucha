@@ -1,4 +1,4 @@
-From 438341288d3a98c83da459a2cc104031c9400b29 Mon Sep 17 00:00:00 2001
+From 825a7ab58a91f8038b6d6968cae26e250f5fcc81 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 30 Aug 2026 22:12:37 +0200
 Subject: [PATCH 12/13] ntdll: HACK: Search for ucrtbase using common rules.

@@ -1,0 +1,48 @@
+From 364c4b155c1d0f072204c99bc860237b763d43ed Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Fri, 4 Sep 2026 17:02:04 +0200
+Subject: [PATCH 11/13] ntdll: Add kombucha_hacks
+
+1. Fixes versions of Roblox Studio that ship mimalloc from crashing.
+
+2. Prevents rendering issues with WebView2's Vulkan backend by not
+   loading Vinegar's Vulkan layer for its processes.
+
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ dlls/ntdll/unix/loader.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index 0d43c5c65e3..d9d1f33b704 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -1855,6 +1855,17 @@ static ULONG_PTR get_image_address(void)
+     return 0;
+ }
+ 
++static void kombucha_hacks(void)
++{
++    if (!getenv("MIMALLOC_FORCE_REDIRECT")) {
++        setenv("MIMALLOC_FORCE_REDIRECT", "1", 0 );
++    }
++
++    if (strstr(main_argv[1], "msedgewebview2.exe")) {
++        unsetenv( "VK_LOADER_LAYERS_ENABLE" );
++    }
++}
++
+ /***********************************************************************
+  *           start_main_thread
+  */
+@@ -1864,6 +1875,7 @@ static void start_main_thread(void)
+ 
+     dbg_init();
+     startup_info_size = server_init_process();
++    kombucha_hacks();
+     virtual_map_user_shared_data();
+     init_cpu_info();
+     init_files();
+-- 
+2.55.0
+

@@ -1,4 +1,4 @@
-From 8257cc9a14fdb2ac5b164813f3c10aa87c8a54ac Mon Sep 17 00:00:00 2001
+From d036b1054be0379d21454b5d0c826fa63f171a25 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 30 Aug 2026 22:13:46 +0200
 Subject: [PATCH 13/13] win32u, server: Support setting desktop close timeout.
