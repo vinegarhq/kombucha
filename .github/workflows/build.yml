@@ -134,7 +134,8 @@ jobs:
             --disable-winemenubuilder \
             --enable-archs=x86_64 \
             --prefix=${{ env.INSTALL }} \
-            --with-mingw
+            --with-mingw \
+            --without-alsa
 
       - name: Configure Ccache
         uses: hendrikmuhs/ccache-action@v1.2
