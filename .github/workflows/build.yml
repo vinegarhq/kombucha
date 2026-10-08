@@ -34,7 +34,6 @@ jobs:
             flex \
             gettext \
             git \
-            libasound2-dev \
             libfontconfig-dev \
             libfreetype-dev \
             libgl-dev \
