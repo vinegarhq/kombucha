@@ -85,6 +85,10 @@ jobs:
 
           git -C wine apply "$GITHUB_WORKSPACE"/patches/${{ inputs.patchset }}/*.patch
 
+      # Compiler/linker flags:
+      # https://gitlab.com/freedesktop-sdk/freedesktop-sdk/-/blob/master/include/flags.yml
+      # Fortify is disabled:
+      # https://bugs.winehq.org/show_bug.cgi?id=24606
       - name: Configure Wine
         working-directory: wine
         run: |
@@ -103,12 +107,22 @@ jobs:
               export x86_64_LDFLAGS="-fuse-ld=ld"
           esac
 
-          export x86_64_CFLAGS="-march=x86-64 -mtune=generic -pipe -O2"
+          export x86_64_CFLAGS="-O2 -pipe -g0"
           export x86_64_CXXFLAGS="${x86_64_CFLAGS}"
-          export CFLAGS="${x86_64_CFLAGS} -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=3 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
-          export CXXFLAGS="${CFLAGS} -Wp,-D_GLIBCXX_ASSERTIONS"
-          export x86_64_LDFLAGS="${x86_64_LDFLAGS} -Wl,-O1 -Wl,--sort-common -Wl,--as-needed"
-          export LDFLAGS="${x86_64_LDFLAGS} -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"
+          export CFLAGS="${x86_64_CFLAGS} \
+            -Wp,-D_FORTIFY_SOURCE=0 \
+            -Wp,-D_GLIBCXX_ASSERTIONS \
+            -fexceptions \
+            -fstack-protector-strong \
+            -grecord-gcc-switches \
+            -fasynchronous-unwind-tables \
+            -fstack-clash-protection \
+            -fcf-protection \
+            -fno-omit-frame-pointer \
+            -mno-omit-leaf-frame-pointer"
+          export CXXFLAGS="${CFLAGS}"
+          export x86_64_LDFLAGS="${x86_64_LDFLAGS} -Wl,--as-needed"
+          export LDFLAGS="${x86_64_LDFLAGS} -Wl,-z,relro,-z,now"
           mkdir -p ${{ env.INSTALL }}
           [ ${{ inputs.patchset }} = proton-unstable ] && ./autogen.sh
           ./configure \
