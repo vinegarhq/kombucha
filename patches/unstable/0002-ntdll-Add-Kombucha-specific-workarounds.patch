@@ -1,4 +1,4 @@
-From 96d3b506bfdf7d51b22544cf40f5b027ee4e3791 Mon Sep 17 00:00:00 2001
+From 4ad9f4c5a4b74113ac6bcd4fec0d00d2339c9bc5 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 27 Sep 2026 15:13:50 +0200
 Subject: [PATCH 02/18] ntdll: Add Kombucha-specific workarounds

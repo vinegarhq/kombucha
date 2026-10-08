@@ -1,4 +1,4 @@
-From f1594f26f198f47d2591a0287089c564c0e79410 Mon Sep 17 00:00:00 2001
+From d2ab09df7e9364509b0cd0447f99b9d8772f44f4 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 27 Sep 2026 13:46:54 +0200
 Subject: [PATCH 17/18] winex11: Don't hide cursor under X11 sessions

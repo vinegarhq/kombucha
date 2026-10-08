@@ -1,8 +1,8 @@
-From 0da92eb21b0b5471723182e0ac9b23245b623780 Mon Sep 17 00:00:00 2001
+From 7063ca88d43deed176fc188fdcf9369febeb1569 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 27 Sep 2026 16:21:34 +0200
-Subject: [PATCH 18/18] winex11: Raise unmanaged hidden windows above siblings
- in virtual desktop
+Subject: [PATCH 18/18] winex11: Raise hidden windows above siblings in virtual
+ desktop
 
 Fixes https://bugs.winehq.org/show_bug.cgi?id=60259.
 
@@ -12,7 +12,7 @@ Signed-off-by: effects3d <effects3dee@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index d7df0a8..5885183 100644
+index d7df0a8..eb54763 100644
 --- a/dlls/winex11.drv/window.c
 +++ b/dlls/winex11.drv/window.c
 @@ -1420,7 +1420,7 @@ static void window_set_config( struct x11drv_win_data *data, RECT rect, BOOL abo
@@ -20,7 +20,7 @@ index d7df0a8..5885183 100644
      if (data->state_locks) return; /* win32 state is being updated, delay the change */
      if (!data->whole_window) return; /* no window, nothing to update */
 -    if (EqualRect( old_rect, new_rect ) && (old_above || !above || data->managed)) return; /* rects are the same, no need to be raised, nothing to update */
-+    if (EqualRect( old_rect, new_rect ) && (old_above && !is_virtual_desktop() || !above || data->managed)) return; /* rects are the same, no need to be raised, nothing to update */
++    if (EqualRect( old_rect, new_rect ) && ((old_above && !is_virtual_desktop()) || !above || data->managed)) return; /* rects are the same, no need to be raised, nothing to update */
      if (window_needs_config_change_delay( data ))
      {
          TRACE( "window %p/%lx is updating _NET_WM_STATE/_MOTIF_WM_HINTS, delaying request\n", data->hwnd, data->whole_window );
