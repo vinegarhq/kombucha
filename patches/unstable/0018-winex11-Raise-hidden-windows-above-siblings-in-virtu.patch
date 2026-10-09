@@ -1,4 +1,4 @@
-From 7063ca88d43deed176fc188fdcf9369febeb1569 Mon Sep 17 00:00:00 2001
+From c9c3ca8fff069002b64754cc8ff91286769c22ab Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 27 Sep 2026 16:21:34 +0200
 Subject: [PATCH 18/18] winex11: Raise hidden windows above siblings in virtual
