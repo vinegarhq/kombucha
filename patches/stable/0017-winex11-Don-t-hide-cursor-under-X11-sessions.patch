@@ -1,7 +1,7 @@
-From 5a05004856639706e0885e45ea2042e42b20a28c Mon Sep 17 00:00:00 2001
+From d154815d387bff5fe66687528ecd93f35571a81e Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 27 Sep 2026 13:46:54 +0200
-Subject: [PATCH 17/18] winex11: Don't hide cursor under X11 sessions
+Subject: [PATCH 17/19] winex11: Don't hide cursor under X11 sessions
 
 Avoids issues with the cursor locking under X11 sessions. Requires
 "winex11: Use XFixes to hide cursor before warping it." patch.

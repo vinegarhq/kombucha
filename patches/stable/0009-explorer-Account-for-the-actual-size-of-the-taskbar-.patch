@@ -1,7 +1,7 @@
-From 44c709f1802a76aa7841de3a2e973b00af393909 Mon Sep 17 00:00:00 2001
+From cf9a1c5235de9d2b7b79d66990f996ca11b4f360 Mon Sep 17 00:00:00 2001
 From: Andrea Faulds <ajf@ajf.me>
 Date: Fri, 21 Aug 2026 01:47:05 +0200
-Subject: [PATCH 09/18] explorer: Account for the actual size of the taskbar if
+Subject: [PATCH 09/19] explorer: Account for the actual size of the taskbar if
  it is visible
 
 This means that, in desktop mode, appbars like the Microsoft Office

@@ -1,7 +1,7 @@
-From bb5cab02fb008ff1dfe4e3f834a13bb8e766fb41 Mon Sep 17 00:00:00 2001
+From 1f38486ba304ddfad5000dee9e08acf76db77bc3 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 30 Aug 2026 21:47:42 +0200
-Subject: [PATCH 15/18] winex11.drv: Move Xfixes extension query to
+Subject: [PATCH 15/19] winex11.drv: Move Xfixes extension query to
  process_attach.
 
 Required by "winex11: Use XFixes to hide cursor before warping it."
