@@ -1,4 +1,4 @@
-From 15098a49de42c2c4dfce109d64bae3bfd34a7787 Mon Sep 17 00:00:00 2001
+From 5b7b16787f34a86b03a9d36e7acacf1f03dadd56 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 27 Sep 2026 14:58:08 +0200
 Subject: [PATCH 06/18] server: Force persistence to 0 seconds
@@ -7,11 +7,11 @@ Workaround for https://github.com/vinegarhq/vinegar/issues/779.
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
- server/main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ server/main.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/server/main.c b/server/main.c
-index 46419a0..6c9765d 100644
+index 46419a0..a90919a 100644
 --- a/server/main.c
 +++ b/server/main.c
 @@ -44,7 +44,7 @@
@@ -23,15 +23,18 @@ index 46419a0..6c9765d 100644
  const char *server_argv0;
  
  /* parse-line args */
-@@ -90,7 +90,7 @@ static void option_callback( int optc, char *optarg )
+@@ -89,10 +89,7 @@ static void option_callback( int optc, char *optarg )
+             ret = kill_lock_owner(-1);
          exit( !ret );
      case 'p':
-         if (optarg && isdigit(*optarg))
+-        if (optarg && isdigit(*optarg))
 -            master_socket_timeout = (timeout_t)atoi( optarg ) * -TICKS_PER_SEC;
-+            master_socket_timeout = (timeout_t)atoi( 0 );
-         else
-             master_socket_timeout = TIMEOUT_INFINITE;
+-        else
+-            master_socket_timeout = TIMEOUT_INFINITE;
++        master_socket_timeout = 0;
          break;
+     case 'v':
+         fprintf( stderr, "%s\n", PACKAGE_STRING );
 -- 
 2.56.0
 

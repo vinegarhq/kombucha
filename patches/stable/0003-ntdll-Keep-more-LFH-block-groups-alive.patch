@@ -1,4 +1,4 @@
-From 0c4e0a79592e7a810d7aa14710c7464912503dc5 Mon Sep 17 00:00:00 2001
+From 6d779b5b7565749f7a0e15234199f5cb233db261 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 30 Aug 2026 22:01:20 +0200
 Subject: [PATCH 03/18] ntdll: Keep more LFH block groups alive.

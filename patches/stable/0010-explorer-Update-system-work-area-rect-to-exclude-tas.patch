@@ -1,4 +1,4 @@
-From cc70c98af84468a1aa2cd514af357c00274e8c5e Mon Sep 17 00:00:00 2001
+From 2b87dcbb753106229b904f7399a7f7f4ceb1fdff Mon Sep 17 00:00:00 2001
 From: Andrea Faulds <ajf@ajf.me>
 Date: Fri, 21 Aug 2026 01:47:27 +0200
 Subject: [PATCH 10/18] explorer: Update system work area rect to exclude
