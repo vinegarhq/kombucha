@@ -1,4 +1,4 @@
-From 2377fb4a80add4b7ea588a775e215344f410f472 Mon Sep 17 00:00:00 2001
+From dcf36845c0bcc2951ba6274061017292b0bb25f4 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 30 Aug 2026 22:11:15 +0200
 Subject: [PATCH 07/18] server: Notify if ntsync is unavailable

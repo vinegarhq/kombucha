@@ -1,4 +1,4 @@
-From 5881d34b710b3ea5935a018351acc12ee36dc79f Mon Sep 17 00:00:00 2001
+From 7caaad64a3e05c78c3e53090408094d56beca1f0 Mon Sep 17 00:00:00 2001
 From: Andrea Faulds <ajf@ajf.me>
 Date: Fri, 21 Aug 2026 00:43:14 +0200
 Subject: [PATCH 08/18] win32u: Apply work area changes to virtual desktop
