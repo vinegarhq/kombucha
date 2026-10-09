@@ -22,6 +22,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v6
 
+      - name: Set Release Tag
+        run: |
+          case ${{ inputs.patchset }} in
+            stable)
+              echo "TAG=${{ inputs.patchset }}+$(date --utc +%Y%m%d%H%M%S)" >> $GITHUB_ENV ;;
+            *)
+              echo "TAG=${{ inputs.patchset }}" >> $GITHUB_ENV
+          esac
+
       - name: Install Build Dependencies
         run: |
           sudo apt update -y
@@ -88,6 +97,9 @@ jobs:
 
           git -C wine apply "$GITHUB_WORKSPACE"/patches/${{ inputs.patchset }}/*.patch
 
+      - name: Apply Release Tag and Wine Commit
+        run: sed -i -e "s/TAG/${{ env.TAG }}/" -e "s/WINE_COMMIT/${{ inputs.commit }}/" "$GITHUB_WORKSPACE"/wine/server/main.c
+
       # Compiler/linker flags:
       # https://gitlab.com/freedesktop-sdk/freedesktop-sdk/-/blob/master/include/flags.yml
       # Fortify is disabled:
@@ -147,14 +159,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          case ${{ inputs.patchset }} in
-            stable)
-              export TAG="${{ inputs.patchset }}+$(date --utc +%Y%m%d%H%M%S)" ;;
-            *)
-              export TAG="${{ inputs.patchset }}"
-          esac
-
-          export NAME="kombucha-${TAG}"
+          export NAME="kombucha-${{ env.TAG }}"
           mv "${{ env.INSTALL }}" "${NAME}"
           rm -rf "${NAME}"/share/{applications,man}
           strip --strip-unneeded "${NAME}"/bin/* "${NAME}"/lib/wine/*/*
