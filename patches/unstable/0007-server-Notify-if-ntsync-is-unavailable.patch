@@ -1,7 +1,7 @@
-From dcf36845c0bcc2951ba6274061017292b0bb25f4 Mon Sep 17 00:00:00 2001
+From b9429a26f49ae88572d72b0e87f3fd7e1ee802af Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 30 Aug 2026 22:11:15 +0200
-Subject: [PATCH 07/18] server: Notify if ntsync is unavailable
+Subject: [PATCH 07/19] server: Notify if ntsync is unavailable
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---

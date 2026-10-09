@@ -1,0 +1,28 @@
+From 192f55052ad482a529129421ec20f72011ad30ba Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Fri, 9 Oct 2026 21:15:27 +0200
+Subject: [PATCH 19/19] server: print tag and wine commit to stdout
+
+For ease of debugging other people's systems. Requires additional
+patching.
+
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ server/main.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/server/main.c b/server/main.c
+index f09f67e..a30275c 100644
+--- a/server/main.c
++++ b/server/main.c
+@@ -253,6 +253,7 @@ int main( int argc, char *argv[] )
+     sock_init();
+     open_master_socket();
+ 
++    fprintf( stderr, "kombucha: using TAG, built from WINE_COMMIT.\n" );
+     if (debug_level) fprintf( stderr, "wineserver: starting (pid=%ld)\n", (long) getpid() );
+     set_current_time();
+     init_signals();
+-- 
+2.56.0
+

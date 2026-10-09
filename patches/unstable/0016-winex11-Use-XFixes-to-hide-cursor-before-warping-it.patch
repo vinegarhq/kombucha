@@ -1,7 +1,7 @@
-From 73c71da44c89330b0a5dc569193fffd2dbb05115 Mon Sep 17 00:00:00 2001
+From 221a5f4825f632776e3e3f6a24f53e2e60929f10 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 30 Aug 2026 21:53:21 +0200
-Subject: [PATCH 16/18] winex11: Use XFixes to hide cursor before warping it.
+Subject: [PATCH 16/19] winex11: Use XFixes to hide cursor before warping it.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

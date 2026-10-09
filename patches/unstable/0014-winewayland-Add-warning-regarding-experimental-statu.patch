@@ -1,7 +1,7 @@
-From 6b32bebb802f34fff14ec1a2fdfc9045249e18ff Mon Sep 17 00:00:00 2001
+From 3a5e41759a8fc294163d677fc781222f72df9171 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Thu, 1 Oct 2026 11:58:52 +0200
-Subject: [PATCH 14/18] winewayland: Add warning regarding experimental status
+Subject: [PATCH 14/19] winewayland: Add warning regarding experimental status
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---

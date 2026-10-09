@@ -1,7 +1,7 @@
-From 4ad9f4c5a4b74113ac6bcd4fec0d00d2339c9bc5 Mon Sep 17 00:00:00 2001
+From 375f05656b7db654ef7d74dfbd5897302d6118de Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 27 Sep 2026 15:13:50 +0200
-Subject: [PATCH 02/18] ntdll: Add Kombucha-specific workarounds
+Subject: [PATCH 02/19] ntdll: Add kombucha_hacks
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
@@ -9,16 +9,16 @@ Signed-off-by: effects3d <effects3dee@gmail.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
-index ebfb6af..f3b4436 100644
+index ebfb6af..f3589b0 100644
 --- a/dlls/ntdll/unix/loader.c
 +++ b/dlls/ntdll/unix/loader.c
 @@ -1846,6 +1846,12 @@ static ULONG_PTR get_image_address(void)
      return 0;
  }
  
-+static void kombucha_hacks_init(void)
++static void kombucha_hacks(void)
 +{
-+    // Fixes versions of Roblox Studio shipping mimalloc from crashing.
++    // Fixes versions of Roblox Studio shipping mimalloc from crashing
 +    setenv("MIMALLOC_FORCE_REDIRECT", "1", 0 );
 +}
 +
@@ -29,7 +29,7 @@ index ebfb6af..f3b4436 100644
      struct thread_data *data = virtual_alloc_first_thread_data();
  
      server_init_process( data );
-+    kombucha_hacks_init();
++    kombucha_hacks();
      virtual_map_user_shared_data();
      init_cpu_info();
      init_files();
