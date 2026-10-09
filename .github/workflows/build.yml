@@ -66,9 +66,9 @@ jobs:
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh 23
-          wget https://github.com/mstorsjo/llvm-mingw/releases/download/20260922/llvm-mingw-20260922-ucrt-ubuntu-22.04-x86_64.tar.xz
-          tar xf ./llvm-mingw-20260922-ucrt-ubuntu-22.04-x86_64.tar.xz
-          echo "$PWD/llvm-mingw-20260922-ucrt-ubuntu-22.04-x86_64/bin:$GITHUB_PATH" >> $GITHUB_PATH
+          wget https://github.com/mstorsjo/llvm-mingw/releases/download/20261006/llvm-mingw-20261006-ucrt-ubuntu-22.04-x86_64.tar.xz
+          tar xf ./llvm-mingw-20261006-ucrt-ubuntu-22.04-x86_64.tar.xz
+          echo "$PWD/llvm-mingw-20261006-ucrt-ubuntu-22.04-x86_64/bin:$GITHUB_PATH" >> $GITHUB_PATH
 
       - name: Fetch Sources
         run: |
