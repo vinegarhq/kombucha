@@ -1,0 +1,64 @@
+From 620ad7b6865b669a9f96db6a08dc94bc44cd1715 Mon Sep 17 00:00:00 2001
+From: effects3d <effects3dee@gmail.com>
+Date: Sun, 30 Aug 2026 21:57:53 +0200
+Subject: [PATCH 05/16] =?UTF-8?q?win32u:=20Don=E2=80=99t=20load=20bitmap?=
+ =?UTF-8?q?=20only=20TTF=20fonts=20without=20bitmap=20table.?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fixes Roblox Studio crashing when trying to render emoji fonts.
+
+Source: Proton-Wine commit: 4bc6c30aa6481268558b37de827e9aa997578ca8
+Signed-off-by: effects3d <effects3dee@gmail.com>
+---
+ dlls/win32u/freetype.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/win32u/freetype.c b/dlls/win32u/freetype.c
+index ce899122009..bf49cd6a32e 100644
+--- a/dlls/win32u/freetype.c
++++ b/dlls/win32u/freetype.c
+@@ -189,6 +189,8 @@ MAKE_FUNCPTR(FcStrSetMember);
+ #define GET_BE_DWORD(x) RtlUlongByteSwap(x)
+ #endif
+ 
++#define MS_EBDT_TAG MS_MAKE_TAG('E','B','D','T')
++
+ /* 'gasp' flags */
+ #define GASP_GRIDFIT 0x01
+ #define GASP_DOGRAY  0x02
+@@ -896,6 +898,8 @@ static struct unix_face *unix_face_create( const char *unix_name, void *data_ptr
+     struct stat st;
+     DWORD face_count;
+     int fd, length;
++    FT_Error error;
++    FT_ULong len;
+ 
+     TRACE( "unix_name %s, face_index %u, data_ptr %p, data_size %u, flags %#x\n",
+            unix_name, face_index, data_ptr, data_size, flags );
+@@ -992,7 +996,20 @@ static struct unix_face *unix_face_create( const char *unix_name, void *data_ptr
+         else
+             This->weight = This->ntm_flags & NTM_BOLD ? FW_BOLD : FW_NORMAL;
+         This->font_version = get_font_version( This->ft_face );
+-        if (!This->scalable) get_bitmap_size( This->ft_face, &This->size );
++        if (!This->scalable)
++        {
++            error = pFT_Load_Sfnt_Table( This->ft_face, RtlUlongByteSwap(MS_EBDT_TAG), 0, NULL, &len );
++            if (error == FT_Err_Table_Missing)
++            {
++                WARN( "EBDT table is missing in bitmap only font %s.\n",
++                      debugstr_w(ft_face_get_family_name( This->ft_face, system_lcid )));
++                pFT_Done_Face( This->ft_face );
++                free( This );
++                This = NULL;
++                goto done;
++            }
++            get_bitmap_size( This->ft_face, &This->size );
++        }
+         get_fontsig( This->ft_face, &This->fs );
+     }
+     else
+-- 
+2.56.0
+

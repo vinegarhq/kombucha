@@ -1,0 +1,110 @@
+From ea7717fa0bdbe159d71c8cb8f65c654578addaec Mon Sep 17 00:00:00 2001
+From: Andrea Faulds <ajf@ajf.me>
+Date: Fri, 21 Aug 2026 01:47:05 +0200
+Subject: [PATCH 03/16] explorer: Account for the actual size of the taskbar if
+ it is visible
+
+This means that, in desktop mode, appbars like the Microsoft Office
+Shortcut Bar can avoid overlapping the taskbar.
+
+Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/11699
+---
+ programs/explorer/appbar.c           | 25 +++++++++++++++++++++----
+ programs/explorer/desktop.c          |  3 +--
+ programs/explorer/explorer_private.h |  1 +
+ programs/explorer/systray.c          |  6 ++++++
+ 4 files changed, 29 insertions(+), 6 deletions(-)
+
+diff --git a/programs/explorer/appbar.c b/programs/explorer/appbar.c
+index 18b125257ee..eb4aec42e8a 100644
+--- a/programs/explorer/appbar.c
++++ b/programs/explorer/appbar.c
+@@ -99,10 +99,30 @@ static void send_poschanged(HWND hwnd)
+     }
+ }
+ 
++static RECT get_taskbar_rect(void)
++{
++    RECT rc;
++    int taskbar_height;
++    rc.left = 0;
++    rc.right = GetSystemMetrics(SM_CXSCREEN);
++    rc.bottom = GetSystemMetrics(SM_CYSCREEN);
++    taskbar_height = get_taskbar_height();
++    if (taskbar_height == 0)
++        taskbar_height = 1; /* ensure taskbar has non-zero height */
++    rc.top = rc.bottom - taskbar_height;
++    return rc;
++}
++
+ /* appbar_cliprect: cut out parts of the rectangle that interfere with existing appbars */
+ static void appbar_cliprect( HWND hwnd, RECT *rect )
+ {
++    RECT taskbar_rect;
+     struct appbar_data* data;
++
++    /* move in the side that corresponds to the taskbar's top edge */
++    taskbar_rect = get_taskbar_rect();
++    rect->bottom = min(rect->bottom, taskbar_rect.top);
++
+     LIST_FOR_EACH_ENTRY(data, &appbars, struct appbar_data, entry)
+     {
+         if (data->hwnd == hwnd)
+@@ -203,10 +223,7 @@ static UINT_PTR handle_appbarmessage(DWORD msg, struct appbar_data_msg *abd)
+     case ABM_GETTASKBARPOS:
+         FIXME( "SHAppBarMessage(ABM_GETTASKBARPOS, hwnd=%p): stub\n", hwnd );
+         /* Report the taskbar is at the bottom of the screen. */
+-        abd->rc.left = 0;
+-        abd->rc.right = GetSystemMetrics(SM_CXSCREEN);
+-        abd->rc.bottom = GetSystemMetrics(SM_CYSCREEN);
+-        abd->rc.top = abd->rc.bottom-1;
++        abd->rc = get_taskbar_rect();
+         abd->uEdge = ABE_BOTTOM;
+         return TRUE;
+     case ABM_ACTIVATE:
+diff --git a/programs/explorer/desktop.c b/programs/explorer/desktop.c
+index ce70c5dd79d..4f52b93afc7 100644
+--- a/programs/explorer/desktop.c
++++ b/programs/explorer/desktop.c
+@@ -1288,9 +1288,8 @@ void manage_desktop( WCHAR *arg )
+         SystemParametersInfoW( SPI_SETDESKWALLPAPER, 0, NULL, FALSE );
+         ClipCursor( NULL );
+         initialize_display_settings( width, height );
+-        initialize_appbar();
+-
+         initialize_systray( using_root, enable_shell, show_systray, no_tray_items );
++        initialize_appbar();
+         if (!using_root && enable_launchers) initialize_launchers( hwnd );
+ 
+         if ((shell32 = LoadLibraryW( L"shell32.dll" )) &&
+diff --git a/programs/explorer/explorer_private.h b/programs/explorer/explorer_private.h
+index 10e8aa0653f..443b8fcaee9 100644
+--- a/programs/explorer/explorer_private.h
++++ b/programs/explorer/explorer_private.h
+@@ -27,5 +27,6 @@ extern void initialize_appbar(void);
+ extern void handle_parent_notify( HWND hwnd, WPARAM wp );
+ extern void do_startmenu( HWND owner );
+ extern LRESULT menu_wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
++extern int get_taskbar_height(void);
+ 
+ #endif  /* __WINE_EXPLORER_PRIVATE_H */
+diff --git a/programs/explorer/systray.c b/programs/explorer/systray.c
+index d662f2168e7..5a41813b590 100644
+--- a/programs/explorer/systray.c
++++ b/programs/explorer/systray.c
+@@ -1097,6 +1097,12 @@ static void do_show_systray(void)
+     sync_taskbar_buttons();
+ }
+ 
++/* for use by appbar.c's accounting */
++int get_taskbar_height(void)
++{
++    return enable_taskbar ? tray_height : 0;
++}
++
+ static LRESULT WINAPI shell_traywnd_proc( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam )
+ {
+     switch (msg)
+-- 
+2.56.0
+

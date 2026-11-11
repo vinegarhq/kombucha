@@ -1,0 +1,78 @@
+From d791e9ee50a47aac1879be4adba13724674f8017 Mon Sep 17 00:00:00 2001
+From: Andrea Faulds <ajf@ajf.me>
+Date: Fri, 21 Aug 2026 01:47:27 +0200
+Subject: [PATCH 04/16] explorer: Update system work area rect to exclude
+ taskbar and appbars
+
+Without this, while appbars are positioned correctly, maximized windows
+will still cover them. Manual testing on Windows 2000 and XP found that
+the work area rect seems to be managed by explorer (it gets reset when
+explorer is started, registering appbars appears to change the work
+area, and killing explorer makes the work area stop changing).
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=59976
+
+Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/11699
+---
+ programs/explorer/appbar.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/programs/explorer/appbar.c b/programs/explorer/appbar.c
+index eb4aec42e8a..1e856240599 100644
+--- a/programs/explorer/appbar.c
++++ b/programs/explorer/appbar.c
+@@ -152,6 +152,26 @@ static void appbar_cliprect( HWND hwnd, RECT *rect )
+     }
+ }
+ 
++/* update the system work area rectangle to exclude the taskbar and appbars
++ * (affects what part of the screen maximized windows cover for example)
++ */
++static void update_work_area(void)
++{
++    RECT rc = { 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
++
++    /* When not running in desktop mode, don't set the work area in order to
++     * avoid interfering with the non-WINE desktop environment's window
++     * management. (See for example freedesktop's _NET_WORKAREA.)
++     */
++    if (get_taskbar_height() == 0)
++        return;
++
++    appbar_cliprect( NULL, &rc );
++    SystemParametersInfoW( SPI_SETWORKAREA, 0, &rc, 0 );
++
++    /* TODO: move and resize existing windows to fit the new work area */
++}
++
+ static UINT_PTR handle_appbarmessage(DWORD msg, struct appbar_data_msg *abd)
+ {
+     struct appbar_data* data;
+@@ -186,6 +206,8 @@ static UINT_PTR handle_appbarmessage(DWORD msg, struct appbar_data_msg *abd)
+             send_poschanged(hwnd);
+ 
+             free( data );
++
++            update_work_area();
+         }
+         else WARN( "removing hwnd %p not on the list\n", hwnd );
+         return TRUE;
+@@ -211,6 +233,8 @@ static UINT_PTR handle_appbarmessage(DWORD msg, struct appbar_data_msg *abd)
+             data->edge = abd->uEdge;
+             data->rc = abd->rc;
+             data->space_reserved = TRUE;
++
++            update_work_area();
+         }
+         else
+         {
+@@ -325,4 +349,6 @@ void initialize_appbar(void)
+         ERR( "Could not create appbar message window\n" );
+         return;
+     }
++
++    update_work_area();
+ }
+-- 
+2.56.0
+

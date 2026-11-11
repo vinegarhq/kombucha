@@ -1,0 +1,74 @@
+From 3f22a9f3cbb78d35b8cda6dac3adf7add3b20f9f Mon Sep 17 00:00:00 2001
+From: sewn <sewn@disroot.org>
+Date: Tue, 10 Nov 2026 23:59:48 +0300
+Subject: [PATCH 09/16] winex11.drv: Use the Win32 move loop under Xwayland.
+
+Xwayland doesn't receive pointer input while the compositor moves a
+window, so the cursor position and mouse messages aren't updated during
+a _NET_WM_MOVERESIZE move. Applications that track the cursor while
+moving, such as docking windows in Roblox Studio, then see a stale
+position.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ dlls/winex11.drv/window.c      | 1 +
+ dlls/winex11.drv/x11drv.h      | 1 +
+ dlls/winex11.drv/x11drv_main.c | 4 ++++
+ 3 files changed, 6 insertions(+)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index eb5476387f3..7f6bf0ffd1f 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -3623,6 +3623,7 @@ LRESULT X11DRV_SysCommand( HWND hwnd, WPARAM wparam, LPARAM lparam, const POINT
+     switch (wparam & 0xfff0)
+     {
+     case SC_MOVE:
++        if (xwayland) goto failed;
+         if (!hittest) dir = _NET_WM_MOVERESIZE_MOVE_KEYBOARD;
+         else dir = _NET_WM_MOVERESIZE_MOVE;
+         break;
+diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
+index 2b7e919b243..d40aedb6543 100644
+--- a/dlls/winex11.drv/x11drv.h
++++ b/dlls/winex11.drv/x11drv.h
+@@ -487,6 +487,7 @@ extern BOOL use_primary_selection;
+ extern BOOL use_system_cursors;
+ extern BOOL grab_fullscreen;
+ extern BOOL usexcomposite;
++extern BOOL xwayland;
+ extern BOOL use_xfixes;
+ extern BOOL managed_mode;
+ extern BOOL private_color_map;
+diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
+index 5c0d2f771c8..b7dcd838d48 100644
+--- a/dlls/winex11.drv/x11drv_main.c
++++ b/dlls/winex11.drv/x11drv_main.c
+@@ -69,6 +69,7 @@ BOOL usexvidmode = TRUE;
+ BOOL usexrandr = TRUE;
+ BOOL usexcomposite = TRUE;
+ BOOL use_egl = TRUE;
++BOOL xwayland = FALSE;
+ BOOL use_xfixes = FALSE;
+ BOOL use_take_focus = TRUE;
+ BOOL use_primary_selection = FALSE;
+@@ -689,6 +690,7 @@ static void init_visuals( Display *display, int screen )
+ NTSTATUS __wine_unix_lib_init(void)
+ {
+     Display *display;
++    int opcode, event, error;
+     void *libx11 = dlopen( SONAME_LIBX11, RTLD_NOW|RTLD_GLOBAL );
+ 
+     if (!libx11)
+@@ -729,6 +731,8 @@ NTSTATUS __wine_unix_lib_init(void)
+                    DisplayHeight( display, default_visual.screen ));
+     X11DRV_Settings_Init();
+ 
++    xwayland = XQueryExtension( display, "XWAYLAND", &opcode, &event, &error );
++
+     /* initialize XVidMode */
+     X11DRV_XF86VM_Init();
+     /* initialize XRandR */
+-- 
+2.56.0
+

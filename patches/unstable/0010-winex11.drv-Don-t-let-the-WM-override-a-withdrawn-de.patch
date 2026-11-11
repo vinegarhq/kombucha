@@ -1,0 +1,41 @@
+From ccb10d5faaa2db122322102d01c06a3f87bff7f6 Mon Sep 17 00:00:00 2001
+From: sewn <sewn@disroot.org>
+Date: Wed, 11 Nov 2026 16:40:36 +0300
+Subject: [PATCH 10/16] winex11.drv: Don't let the WM override a withdrawn
+ desired state.
+
+Window managers never map a window on their own, but a late WM_STATE
+reply to an earlier map request may arrive after the window has been
+hidden. Keep the desired state withdrawn in that case, so that the
+window is unmapped again instead of being left visible.
+
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+---
+ dlls/winex11.drv/window.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 7f6bf0ffd1f..21c2b042bf6 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -1875,6 +1875,7 @@ void window_wm_state_notify( struct x11drv_win_data *data, unsigned long serial,
+     UINT *desired = &data->desired_state.wm_state, *pending = &data->pending_state.wm_state, *current = &data->current_state.wm_state;
+     unsigned long *expect_serial = &data->wm_state_serial;
+     const char *reason = NULL, *expected, *received, *prefix;
++    UINT preserved = WithdrawnState;
+ 
+     prefix = wine_dbg_sprintf( "window %p/%lx ", data->hwnd, data->whole_window );
+     received = wine_dbg_sprintf( "WM_STATE %#x/%lu", value, serial );
+@@ -1882,6 +1883,9 @@ void window_wm_state_notify( struct x11drv_win_data *data, unsigned long serial,
+     /* ignore Metacity/Mutter transient NormalState during WithdrawnState <-> IconicState transitions */
+     if (value == NormalState && *current + *pending == IconicState) reason = "transient ";
+ 
++    /* the WM never maps a window on its own, don't let late replies to a map request overwrite a hide request */
++    if (data->managed && !data->embedded && *desired == WithdrawnState && value != WithdrawnState) desired = &preserved;
++
+     if (!handle_state_change( serial, expect_serial, sizeof(value), &value, desired, pending,
+                               current, expected, prefix, received, reason ))
+         return;
+-- 
+2.56.0
+
