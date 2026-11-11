@@ -129,6 +129,7 @@ jobs:
           [ ${{ inputs.patchset }} = proton-unstable ] && ./autogen.sh
           ./configure \
             --enable-archs=x86_64 \
+            --prefix=${{ env.INSTALL }} \
             --without-alsa \
             --disable-dxdiagn \
             --disable-mscoree \
