@@ -1,7 +1,7 @@
 From eec292e34ed8346fe986fe714383ad2c7aa2b724 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 30 Aug 2026 22:12:37 +0200
-Subject: [PATCH 12/16] ntdll: HACK: Search for ucrtbase using common rules.
+Subject: [PATCH 12/17] ntdll: HACK: Search for ucrtbase using common rules.
 
 Fixes versions of Roblox Studio that ship mimalloc from crashing with
 MIMALLOC_VERBOSE=3 set. Should also fix non-fatal import errors.

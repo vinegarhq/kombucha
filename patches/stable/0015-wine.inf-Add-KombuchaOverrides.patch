@@ -1,7 +1,7 @@
 From 6a425df8fb0b8f535b7448d3a49dcaa595538b13 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 27 Sep 2026 14:41:16 +0200
-Subject: [PATCH 15/16] wine.inf: Add KombuchaOverrides
+Subject: [PATCH 15/17] wine.inf: Add KombuchaOverrides
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---

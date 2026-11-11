@@ -1,0 +1,175 @@
+From 5e73918fa11de1f80db7d0eba647d0b4660292f7 Mon Sep 17 00:00:00 2001
+From: sewn <sewn@disroot.org>
+Date: Wed, 11 Nov 2026 18:53:27 +0300
+Subject: [PATCH 17/17] server, wineboot: Remove syswow64 support and
+ unnecessary services.
+
+- server: Stop advertising i386 for 64-bit prefixes on x86_64, so
+  wineboot no longer runs Wow64Install and never populates syswow64.
+- wineboot: When the prefix has no 32-bit support, remove an existing
+  syswow64 on update. Only files installed by Wine (builtin and
+  placeholder DLLs, .nls, .winmd, winevulkan.json) are deleted; the
+  directory is kept if anything else is in it.
+- wine.inf: Start the EventLog service on demand instead of at boot,
+  and stop running winemenubuilder at startup.
+- wine.inf, wineboot: Drop the winebth (Bluetooth) and wineusb (USB
+  passthrough) root devices and drivers; only the HID bus is kept for
+  gamepads.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ loader/wine.inf.in           |  6 +--
+ programs/wineboot/wineboot.c | 72 +++++++++++++++++++++++++++++++++++-
+ server/registry.c            |  4 +-
+ 3 files changed, 75 insertions(+), 7 deletions(-)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 4edede63baf..b2e99f80f19 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -922,7 +922,8 @@ Description="Event Log"
+ DisplayName="Event Log"
+ ServiceBinary="%11%\svchost.exe -k LocalServiceNetworkRestricted"
+ ServiceType=32
+-StartType=2
++; Kombucha: start on demand instead of at boot, nothing in Studio/WebView2 talks to it
++StartType=3
+ ErrorControl=1
+ 
+ [HTTPService]
+@@ -1128,7 +1129,6 @@ StartType=3
+ ErrorControl=1
+ 
+ [Services]
+-HKLM,%CurrentVersion%\RunServices,"winemenubuilder",2,"%11%\winemenubuilder.exe -a -r"
+ HKLM,"System\CurrentControlSet\Services\Dnscache\Parameters",,16
+ HKLM,"System\CurrentControlSet\Services\Eventlog\Application",,16
+ HKLM,"System\CurrentControlSet\Services\Eventlog\System","Sources",0x10000,""
+@@ -1248,10 +1248,8 @@ services,"@%11%\ws2_32.dll,-4"
+ [InfFiles]
+ input.inf,"@%12%\hidclass.sys,-1"
+ mouhid.inf,"@%12%\mouhid.sys,-1"
+-winebth.inf,"@%12%\winebth.sys,-1"
+ winebus.inf,"@%12%\winebus.sys,-1"
+ winehid.inf,"@%12%\winehid.sys,-1"
+-wineusb.inf,"@%12%\wineusb.sys,-1"
+ winexinput.inf,"@%12%\winexinput.sys,-1"
+ 
+ [NlsFiles]
+diff --git a/programs/wineboot/wineboot.c b/programs/wineboot/wineboot.c
+index 3900d623fa2..064b6e3a2cf 100644
+--- a/programs/wineboot/wineboot.c
++++ b/programs/wineboot/wineboot.c
+@@ -1595,9 +1595,8 @@ static void install_root_pnp_devices(void)
+     }
+     root_devices[] =
+     {
+-        {"root\\wine\\winebth", "root\\winebth\0", "C:\\windows\\inf\\winebth.inf"},
++        /* Kombucha: winebth and wineusb are not built, only the HID bus is needed */
+         {"root\\wine\\winebus", "root\\winebus\0", "C:\\windows\\inf\\winebus.inf"},
+-        {"root\\wine\\wineusb", "root\\wineusb\0", "C:\\windows\\inf\\wineusb.inf"},
+     };
+     SP_DEVINFO_DATA device = {sizeof(device)};
+     unsigned int i;
+@@ -1674,6 +1673,66 @@ static void update_user_profile(void)
+     LocalFree(sid);
+ }
+ 
++/* check if a file was installed by Wine: builtin or placeholder dll, nls or winmd file */
++static BOOL is_wine_provided_file( const WCHAR *path )
++{
++    static const char builtin_signature[] = "Wine builtin DLL";
++    static const char fakedll_signature[] = "Wine placeholder DLL";
++    char buffer[sizeof(IMAGE_DOS_HEADER) + 32];
++    const WCHAR *ext = wcsrchr( path, '.' ), *name = wcsrchr( path, '\\' );
++    BOOL ret = FALSE;
++    HANDLE file;
++    DWORD size;
++
++    if (ext && (!wcsicmp( ext, L".nls" ) || !wcsicmp( ext, L".winmd" ))) return TRUE;
++    if (name && !wcsicmp( name + 1, L"winevulkan.json" )) return TRUE;
++
++    file = CreateFileW( path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_DELETE, NULL, OPEN_EXISTING, 0, 0 );
++    if (file == INVALID_HANDLE_VALUE) return FALSE;
++    if (ReadFile( file, buffer, sizeof(buffer), &size, NULL ) && size == sizeof(buffer) &&
++        ((IMAGE_DOS_HEADER *)buffer)->e_magic == IMAGE_DOS_SIGNATURE)
++    {
++        const char *sig = buffer + sizeof(IMAGE_DOS_HEADER);
++        ret = !memcmp( sig, builtin_signature, sizeof(builtin_signature) ) ||
++              !memcmp( sig, fakedll_signature, sizeof(fakedll_signature) );
++    }
++    CloseHandle( file );
++    return ret;
++}
++
++/* Kombucha: remove the files that a Wine with 32-bit support installed in a wow64 system
++ * directory; files that don't come from Wine are left alone. Returns TRUE if the directory
++ * ended up empty and was removed. */
++static BOOL remove_wow64_system_dir( const WCHAR *dir )
++{
++    WCHAR path[MAX_PATH];
++    WIN32_FIND_DATAW data;
++    BOOL empty = TRUE;
++    HANDLE handle;
++
++    if (swprintf( path, ARRAY_SIZE(path), L"%s\\*", dir ) < 0) return FALSE;
++    if ((handle = FindFirstFileW( path, &data )) == INVALID_HANDLE_VALUE) return FALSE;
++    do
++    {
++        if (!wcscmp( data.cFileName, L"." ) || !wcscmp( data.cFileName, L".." )) continue;
++        if (swprintf( path, ARRAY_SIZE(path), L"%s\\%s", dir, data.cFileName ) < 0)
++        {
++            empty = FALSE;
++            continue;
++        }
++        if (data.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) empty = FALSE;
++        else if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
++        {
++            if (!remove_wow64_system_dir( path )) empty = FALSE;
++        }
++        else if (!is_wine_provided_file( path ) || !DeleteFileW( path )) empty = FALSE;
++    }
++    while (FindNextFileW( handle, &data ));
++    FindClose( handle );
++
++    return empty && RemoveDirectoryW( dir );
++}
++
+ /* execute rundll32 on the wine.inf file if necessary */
+ static void update_wineprefix( BOOL force )
+ {
+@@ -1726,6 +1785,15 @@ static void update_wineprefix( BOOL force )
+             }
+             DestroyWindow( hwnd );
+         }
++        if (is_64bit && machines[0].Machine && !machines[1].Machine)  /* no 32-bit support */
++        {
++            WCHAR dir[MAX_PATH];
++
++            GetWindowsDirectoryW( dir, ARRAY_SIZE(dir) - ARRAY_SIZE(L"\\syswow64") );
++            wcscat( dir, L"\\syswow64" );
++            if (GetFileAttributesW( dir ) != INVALID_FILE_ATTRIBUTES && !remove_wow64_system_dir( dir ))
++                WINE_WARN( "%s still contains files that were not installed by Wine\n", debugstr_w(dir) );
++        }
+         install_root_pnp_devices();
+         update_user_profile();
+ 
+diff --git a/server/registry.c b/server/registry.c
+index e71d02350b2..53ac4f557e9 100644
+--- a/server/registry.c
++++ b/server/registry.c
+@@ -1806,8 +1806,10 @@ static void init_supported_machines(void)
+ #ifdef __i386__
+     if (prefix_type == PREFIX_32BIT) supported_machines[count++] = IMAGE_FILE_MACHINE_I386;
+ #elif defined(__x86_64__)
++    /* Kombucha: this is a 64-bit only build (--enable-archs=x86_64), don't advertise
++     * i386 for 64-bit prefixes so that wineboot never populates syswow64 */
+     if (prefix_type == PREFIX_64BIT) supported_machines[count++] = IMAGE_FILE_MACHINE_AMD64;
+-    supported_machines[count++] = IMAGE_FILE_MACHINE_I386;
++    else supported_machines[count++] = IMAGE_FILE_MACHINE_I386;
+ #elif defined(__arm__)
+     if (prefix_type == PREFIX_32BIT) supported_machines[count++] = IMAGE_FILE_MACHINE_ARMNT;
+ #elif defined(__aarch64__)
+-- 
+2.56.0
+

@@ -1,7 +1,7 @@
 From 0d1fc05786e8ab7a59f06964d23b4f11df5c8860 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Tue, 29 Sep 2026 16:46:25 +0200
-Subject: [PATCH 13/16] ntdll: Use default loadorder for DXVK DLLs
+Subject: [PATCH 13/17] ntdll: Use default loadorder for DXVK DLLs
 
 Fixes https://github.com/vinegarhq/vinegar/issues/871.
 

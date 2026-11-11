@@ -1,7 +1,7 @@
 From 620ad7b6865b669a9f96db6a08dc94bc44cd1715 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 30 Aug 2026 21:57:53 +0200
-Subject: [PATCH 05/16] =?UTF-8?q?win32u:=20Don=E2=80=99t=20load=20bitmap?=
+Subject: [PATCH 05/17] =?UTF-8?q?win32u:=20Don=E2=80=99t=20load=20bitmap?=
  =?UTF-8?q?=20only=20TTF=20fonts=20without=20bitmap=20table.?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

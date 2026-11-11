@@ -1,7 +1,7 @@
 From e6d3025b0c8a1c527267a27867d16a9b273f1c9c Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 27 Sep 2026 15:13:50 +0200
-Subject: [PATCH 14/16] ntdll: Add kombucha_hacks
+Subject: [PATCH 14/17] ntdll: Add kombucha_hacks
 
 Signed-off-by: effects3d <effects3dee@gmail.com>
 ---

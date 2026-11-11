@@ -1,7 +1,7 @@
 From e7968cd3f32131888f370eeb24dc3b5233698b36 Mon Sep 17 00:00:00 2001
 From: sewn <sewn@disroot.org>
 Date: Wed, 11 Nov 2026 16:40:36 +0300
-Subject: [PATCH 10/16] winex11.drv: Don't let the WM override a withdrawn
+Subject: [PATCH 10/17] winex11.drv: Don't let the WM override a withdrawn
  desired state.
 
 Window managers never map a window on their own, but a late WM_STATE

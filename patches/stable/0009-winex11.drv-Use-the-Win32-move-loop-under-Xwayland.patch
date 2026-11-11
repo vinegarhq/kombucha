@@ -1,7 +1,7 @@
 From 3f22a9f3cbb78d35b8cda6dac3adf7add3b20f9f Mon Sep 17 00:00:00 2001
 From: sewn <sewn@disroot.org>
 Date: Tue, 10 Nov 2026 23:59:48 +0300
-Subject: [PATCH 09/16] winex11.drv: Use the Win32 move loop under Xwayland.
+Subject: [PATCH 09/17] winex11.drv: Use the Win32 move loop under Xwayland.
 
 Xwayland doesn't receive pointer input while the compositor moves a
 window, so the cursor position and mouse messages aren't updated during
