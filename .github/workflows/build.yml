@@ -129,8 +129,6 @@ jobs:
           [ ${{ inputs.patchset }} = proton-unstable ] && ./autogen.sh
           ./configure \
             --enable-archs=x86_64 \
-            --prefix=${{ env.INSTALL }} \
-            --with-mingw \
             --without-alsa \
             --disable-dxdiagn \
             --disable-mscoree \
@@ -571,7 +569,7 @@ jobs:
             --disable-xpssvcs \
             --disable-wow64 \
             --disable-wow64cpu \
-            --disable-wow64wno
+            --disable-wow64win
 
       - name: Configure Ccache
         uses: hendrikmuhs/ccache-action@v1.2
