@@ -10,7 +10,7 @@ on:
           - proton-unstable
       commit:
         type: string
-        default: 7298a818b79446bae153b8d5aa27235ab3703bf9
+        default: 2528aff26208257fdbf980666a4f0e66d47563ce
 permissions:
   contents: write
   pull-requests: read
