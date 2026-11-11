@@ -97,9 +97,6 @@ jobs:
 
           git -C wine apply "$GITHUB_WORKSPACE"/patches/${{ inputs.patchset }}/*.patch
 
-      - name: Apply Release Tag and Wine Commit
-        run: sed -i -e "s/TAG/${{ env.TAG }}/" -e "s/WINE_COMMIT/${{ inputs.commit }}/" "$GITHUB_WORKSPACE"/wine/server/main.c
-
       # Compiler/linker flags:
       # https://gitlab.com/freedesktop-sdk/freedesktop-sdk/-/blob/master/include/flags.yml
       # Fortify is disabled:
