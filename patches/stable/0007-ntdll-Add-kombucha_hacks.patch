@@ -1,15 +1,14 @@
-From e6d3025b0c8a1c527267a27867d16a9b273f1c9c Mon Sep 17 00:00:00 2001
+From 0c0ae25776b556e65403bc6d6f9423d2b605db39 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 27 Sep 2026 15:13:50 +0200
-Subject: [PATCH 14/17] ntdll: Add kombucha_hacks
+Subject: [PATCH 07/17] ntdll: Add kombucha_hacks
 
-Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/ntdll/unix/loader.c | 7 +++++++
  1 file changed, 7 insertions(+)
 
 diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
-index dde4b58df36..2e3f5602c91 100644
+index dde4b58..2e3f560 100644
 --- a/dlls/ntdll/unix/loader.c
 +++ b/dlls/ntdll/unix/loader.c
 @@ -1822,6 +1822,12 @@ static ULONG_PTR get_image_address(void)
@@ -34,5 +33,5 @@ index dde4b58df36..2e3f5602c91 100644
      init_cpu_info();
      init_files();
 -- 
-2.56.0
+2.56.1
 

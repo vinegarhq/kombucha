@@ -1,15 +1,14 @@
-From 6a425df8fb0b8f535b7448d3a49dcaa595538b13 Mon Sep 17 00:00:00 2001
+From c37573ecc601071d1ce77827582eae8e09c38e12 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 27 Sep 2026 14:41:16 +0200
-Subject: [PATCH 15/17] wine.inf: Add KombuchaOverrides
+Subject: [PATCH 13/17] wine.inf: Add KombuchaOverrides
 
-Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  loader/wine.inf.in | 20 ++++++++++++++++++++
  1 file changed, 20 insertions(+)
 
 diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 9288b580b68..4edede63baf 100644
+index 73d2cf4..b2e99f8 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
 @@ -63,6 +63,7 @@ AddReg=\
@@ -20,7 +19,7 @@ index 9288b580b68..4edede63baf 100644
      LicenseInformation,\
      MCI,\
      Misc,\
-@@ -1357,3 +1358,22 @@ InfFiles  = 17
+@@ -1355,3 +1356,22 @@ InfFiles  = 17
  NlsFiles  = 11
  SortFiles = 10,globalization\sorting
  WinmdFiles = 11,winmetadata
@@ -44,5 +43,5 @@ index 9288b580b68..4edede63baf 100644
 +; WebView2 uses Arial as its font, which is proprietary and doesn't come pre-installed on most Linux distributions, so force it to use Sans.
 +HKCU,Software\Wine\Fonts\Replacements,"Arial",0x2,"Sans"
 -- 
-2.56.0
+2.56.1
 

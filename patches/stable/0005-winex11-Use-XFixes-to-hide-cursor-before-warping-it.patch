@@ -1,7 +1,7 @@
-From 98db003676d0d5be8c554bc6d8468d93aad9e817 Mon Sep 17 00:00:00 2001
+From 7f7aeb5d62c0280f58cc766b06b0303a53f49660 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 30 Aug 2026 21:53:21 +0200
-Subject: [PATCH 07/17] winex11: Use XFixes to hide cursor before warping it.
+Subject: [PATCH 05/17] winex11: Use XFixes to hide cursor before warping it.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -10,7 +10,6 @@ Fixes cursor not being locked when panning Roblox Studio’s viewport
 camera under Xwayland.
 
 Source: Proton-Wine commit: 3946d2fe5e9b0a31223eccce0f05ff7b34e2f92a
-Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/winex11.drv/mouse.c       | 3 +++
  dlls/winex11.drv/x11drv_main.c | 4 ++++
@@ -18,7 +17,7 @@ Signed-off-by: effects3d <effects3dee@gmail.com>
  3 files changed, 9 insertions(+)
 
 diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
-index cb79ed55fee..acc5bc895ad 100644
+index cb79ed5..c51ea15 100644
 --- a/dlls/winex11.drv/mouse.c
 +++ b/dlls/winex11.drv/mouse.c
 @@ -60,6 +60,7 @@ MAKE_FUNCPTR(XcursorLibraryLoadCursor);
@@ -33,15 +32,15 @@ index cb79ed55fee..acc5bc895ad 100644
          return FALSE;
      }
  
-+    pXFixesHideCursor( data->display, root_window );
++    if (xwayland) pXFixesHideCursor( data->display, root_window );
      XWarpPointer( data->display, root_window, root_window, 0, 0, 0, 0, pos.x, pos.y );
      data->warp_serial = NextRequest( data->display );
-+    pXFixesShowCursor( data->display, root_window );
++    if (xwayland) pXFixesShowCursor( data->display, root_window );
  
      if (!clipping_cursor)
          XUngrabPointer( data->display, CurrentTime );
 diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index c13b97755cc..5c0d2f771c8 100644
+index c13b977..5c0d2f7 100644
 --- a/dlls/winex11.drv/x11drv_main.c
 +++ b/dlls/winex11.drv/x11drv_main.c
 @@ -572,11 +572,13 @@ sym_not_found:
@@ -73,7 +72,7 @@ index c13b97755cc..5c0d2f771c8 100644
  
      if (!pXFixesQueryExtension(gdi_display, &event, &error))
 diff --git a/dlls/winex11.drv/xfixes.h b/dlls/winex11.drv/xfixes.h
-index f3beea5efed..6cd4e48425b 100644
+index f3beea5..6cd4e48 100644
 --- a/dlls/winex11.drv/xfixes.h
 +++ b/dlls/winex11.drv/xfixes.h
 @@ -27,9 +27,11 @@
@@ -89,5 +88,5 @@ index f3beea5efed..6cd4e48425b 100644
  #endif /* defined(SONAME_LIBXFIXES) */
  
 -- 
-2.56.0
+2.56.1
 

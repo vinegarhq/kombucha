@@ -1,17 +1,15 @@
-From 0d1fc05786e8ab7a59f06964d23b4f11df5c8860 Mon Sep 17 00:00:00 2001
+From dd39cf796b8e3c25fa8b2d01ccdcb57cbed2678b Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Tue, 29 Sep 2026 16:46:25 +0200
-Subject: [PATCH 13/17] ntdll: Use default loadorder for DXVK DLLs
+Subject: [PATCH 10/17] ntdll: Use default loadorder for DXVK DLLs
 
 Fixes https://github.com/vinegarhq/vinegar/issues/871.
-
-Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/ntdll/unix/loadorder.c | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/dlls/ntdll/unix/loadorder.c b/dlls/ntdll/unix/loadorder.c
-index 54d485a5b58..c3a4d52b3b2 100644
+index 54d485a..c3a4d52 100644
 --- a/dlls/ntdll/unix/loadorder.c
 +++ b/dlls/ntdll/unix/loadorder.c
 @@ -429,6 +429,7 @@ static enum loadorder version_heuristics( const UNICODE_STRING *nt_name,
@@ -23,5 +21,5 @@ index 54d485a5b58..c3a4d52b3b2 100644
          { {0}, LO_NATIVE_BUILTIN }
      };
 -- 
-2.56.0
+2.56.1
 

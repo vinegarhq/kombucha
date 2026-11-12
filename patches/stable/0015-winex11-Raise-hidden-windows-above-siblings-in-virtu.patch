@@ -1,18 +1,16 @@
-From 45f6879fffd08cbf337211c9d6086146fbba1d72 Mon Sep 17 00:00:00 2001
+From 81a3a58b67547a364000f767594f6b06f366a483 Mon Sep 17 00:00:00 2001
 From: effects3d <effects3dee@gmail.com>
 Date: Sun, 27 Sep 2026 16:21:34 +0200
-Subject: [PATCH 08/17] winex11: Raise hidden windows above siblings in virtual
+Subject: [PATCH 15/17] winex11: Raise hidden windows above siblings in virtual
  desktop
 
 Fixes https://bugs.winehq.org/show_bug.cgi?id=60259.
-
-Signed-off-by: effects3d <effects3dee@gmail.com>
 ---
  dlls/winex11.drv/window.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index d7df0a85199..eb5476387f3 100644
+index d7df0a8..eb54763 100644
 --- a/dlls/winex11.drv/window.c
 +++ b/dlls/winex11.drv/window.c
 @@ -1420,7 +1420,7 @@ static void window_set_config( struct x11drv_win_data *data, RECT rect, BOOL abo
@@ -25,5 +23,5 @@ index d7df0a85199..eb5476387f3 100644
      {
          TRACE( "window %p/%lx is updating _NET_WM_STATE/_MOTIF_WM_HINTS, delaying request\n", data->hwnd, data->whole_window );
 -- 
-2.56.0
+2.56.1
 

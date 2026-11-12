@@ -1,7 +1,7 @@
-From 5e73918fa11de1f80db7d0eba647d0b4660292f7 Mon Sep 17 00:00:00 2001
+From 2042a3480bc3e72dbde6ce8df398b8fdd400ce40 Mon Sep 17 00:00:00 2001
 From: sewn <sewn@disroot.org>
 Date: Wed, 11 Nov 2026 18:53:27 +0300
-Subject: [PATCH 17/17] server, wineboot: Remove syswow64 support and
+Subject: [PATCH 11/17] server, wineboot: Remove syswow64 support and
  unnecessary services.
 
 - server: Stop advertising i386 for 64-bit prefixes on x86_64, so
@@ -24,10 +24,10 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
  3 files changed, 75 insertions(+), 7 deletions(-)
 
 diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 4edede63baf..b2e99f80f19 100644
+index 9288b58..73d2cf4 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
-@@ -922,7 +922,8 @@ Description="Event Log"
+@@ -921,7 +921,8 @@ Description="Event Log"
  DisplayName="Event Log"
  ServiceBinary="%11%\svchost.exe -k LocalServiceNetworkRestricted"
  ServiceType=32
@@ -37,7 +37,7 @@ index 4edede63baf..b2e99f80f19 100644
  ErrorControl=1
  
  [HTTPService]
-@@ -1128,7 +1129,6 @@ StartType=3
+@@ -1127,7 +1128,6 @@ StartType=3
  ErrorControl=1
  
  [Services]
@@ -45,7 +45,7 @@ index 4edede63baf..b2e99f80f19 100644
  HKLM,"System\CurrentControlSet\Services\Dnscache\Parameters",,16
  HKLM,"System\CurrentControlSet\Services\Eventlog\Application",,16
  HKLM,"System\CurrentControlSet\Services\Eventlog\System","Sources",0x10000,""
-@@ -1248,10 +1248,8 @@ services,"@%11%\ws2_32.dll,-4"
+@@ -1247,10 +1247,8 @@ services,"@%11%\ws2_32.dll,-4"
  [InfFiles]
  input.inf,"@%12%\hidclass.sys,-1"
  mouhid.inf,"@%12%\mouhid.sys,-1"
@@ -57,10 +57,10 @@ index 4edede63baf..b2e99f80f19 100644
  
  [NlsFiles]
 diff --git a/programs/wineboot/wineboot.c b/programs/wineboot/wineboot.c
-index 3900d623fa2..064b6e3a2cf 100644
+index 7dda9ec..bf87e52 100644
 --- a/programs/wineboot/wineboot.c
 +++ b/programs/wineboot/wineboot.c
-@@ -1595,9 +1595,8 @@ static void install_root_pnp_devices(void)
+@@ -1593,9 +1593,8 @@ static void install_root_pnp_devices(void)
      }
      root_devices[] =
      {
@@ -71,7 +71,7 @@ index 3900d623fa2..064b6e3a2cf 100644
      };
      SP_DEVINFO_DATA device = {sizeof(device)};
      unsigned int i;
-@@ -1674,6 +1673,66 @@ static void update_user_profile(void)
+@@ -1672,6 +1671,66 @@ static void update_user_profile(void)
      LocalFree(sid);
  }
  
@@ -138,7 +138,7 @@ index 3900d623fa2..064b6e3a2cf 100644
  /* execute rundll32 on the wine.inf file if necessary */
  static void update_wineprefix( BOOL force )
  {
-@@ -1726,6 +1785,15 @@ static void update_wineprefix( BOOL force )
+@@ -1724,6 +1783,15 @@ static void update_wineprefix( BOOL force )
              }
              DestroyWindow( hwnd );
          }
@@ -155,7 +155,7 @@ index 3900d623fa2..064b6e3a2cf 100644
          update_user_profile();
  
 diff --git a/server/registry.c b/server/registry.c
-index e71d02350b2..53ac4f557e9 100644
+index e71d023..53ac4f5 100644
 --- a/server/registry.c
 +++ b/server/registry.c
 @@ -1806,8 +1806,10 @@ static void init_supported_machines(void)
@@ -171,5 +171,5 @@ index e71d02350b2..53ac4f557e9 100644
      if (prefix_type == PREFIX_32BIT) supported_machines[count++] = IMAGE_FILE_MACHINE_ARMNT;
  #elif defined(__aarch64__)
 -- 
-2.56.0
+2.56.1
 

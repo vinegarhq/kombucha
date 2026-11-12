@@ -1,7 +1,7 @@
-From e7968cd3f32131888f370eeb24dc3b5233698b36 Mon Sep 17 00:00:00 2001
+From 300bd8cfea808dd4953378f7c6a38d7bba47920b Mon Sep 17 00:00:00 2001
 From: sewn <sewn@disroot.org>
 Date: Wed, 11 Nov 2026 16:40:36 +0300
-Subject: [PATCH 10/17] winex11.drv: Don't let the WM override a withdrawn
+Subject: [PATCH 17/17] winex11.drv: Don't let the WM override a withdrawn
  desired state.
 
 Window managers never map a window on their own, but a late WM_STATE
@@ -15,7 +15,7 @@ Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
  1 file changed, 4 insertions(+)
 
 diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index 7f6bf0ffd1f..21c2b042bf6 100644
+index 7f6bf0f..21c2b04 100644
 --- a/dlls/winex11.drv/window.c
 +++ b/dlls/winex11.drv/window.c
 @@ -1875,6 +1875,7 @@ void window_wm_state_notify( struct x11drv_win_data *data, unsigned long serial,
@@ -37,5 +37,5 @@ index 7f6bf0ffd1f..21c2b042bf6 100644
                                current, expected, prefix, received, reason ))
          return;
 -- 
-2.56.0
+2.56.1
 

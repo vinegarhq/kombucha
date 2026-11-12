@@ -1,7 +1,7 @@
-From 3f22a9f3cbb78d35b8cda6dac3adf7add3b20f9f Mon Sep 17 00:00:00 2001
+From c091d1058c186fa7808ef884ea09b548538487b6 Mon Sep 17 00:00:00 2001
 From: sewn <sewn@disroot.org>
 Date: Tue, 10 Nov 2026 23:59:48 +0300
-Subject: [PATCH 09/17] winex11.drv: Use the Win32 move loop under Xwayland.
+Subject: [PATCH 16/17] winex11.drv: Use the Win32 move loop under Xwayland.
 
 Xwayland doesn't receive pointer input while the compositor moves a
 window, so the cursor position and mouse messages aren't updated during
@@ -17,7 +17,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
  3 files changed, 6 insertions(+)
 
 diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index eb5476387f3..7f6bf0ffd1f 100644
+index eb54763..7f6bf0f 100644
 --- a/dlls/winex11.drv/window.c
 +++ b/dlls/winex11.drv/window.c
 @@ -3623,6 +3623,7 @@ LRESULT X11DRV_SysCommand( HWND hwnd, WPARAM wparam, LPARAM lparam, const POINT
@@ -29,7 +29,7 @@ index eb5476387f3..7f6bf0ffd1f 100644
          else dir = _NET_WM_MOVERESIZE_MOVE;
          break;
 diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
-index 2b7e919b243..d40aedb6543 100644
+index 2b7e919..d40aedb 100644
 --- a/dlls/winex11.drv/x11drv.h
 +++ b/dlls/winex11.drv/x11drv.h
 @@ -487,6 +487,7 @@ extern BOOL use_primary_selection;
@@ -41,7 +41,7 @@ index 2b7e919b243..d40aedb6543 100644
  extern BOOL managed_mode;
  extern BOOL private_color_map;
 diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index 5c0d2f771c8..b7dcd838d48 100644
+index 5c0d2f7..b7dcd83 100644
 --- a/dlls/winex11.drv/x11drv_main.c
 +++ b/dlls/winex11.drv/x11drv_main.c
 @@ -69,6 +69,7 @@ BOOL usexvidmode = TRUE;
@@ -70,5 +70,5 @@ index 5c0d2f771c8..b7dcd838d48 100644
      X11DRV_XF86VM_Init();
      /* initialize XRandR */
 -- 
-2.56.0
+2.56.1
 

@@ -1,7 +1,7 @@
-From 77e5e38854a468982e3c8661897a3c69a2ae3d31 Mon Sep 17 00:00:00 2001
+From e5e6221f225d4a00667da46305cc70fb1aaf5ea4 Mon Sep 17 00:00:00 2001
 From: Andrea Faulds <ajf@ajf.me>
 Date: Fri, 21 Aug 2026 00:43:14 +0200
-Subject: [PATCH 02/17] win32u: Apply work area changes to virtual desktop
+Subject: [PATCH 01/17] win32u: Apply work area changes to virtual desktop
  monitor serverwide
 
 Before this commit:
@@ -25,7 +25,7 @@ Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/11699
  1 file changed, 55 insertions(+), 7 deletions(-)
 
 diff --git a/dlls/win32u/sysparams.c b/dlls/win32u/sysparams.c
-index c57add45674..d4dabe9c2ba 100644
+index c57add4..d4dabe9 100644
 --- a/dlls/win32u/sysparams.c
 +++ b/dlls/win32u/sysparams.c
 @@ -294,7 +294,7 @@ union sysparam_all_entry
@@ -140,5 +140,5 @@ index c57add45674..d4dabe9c2ba 100644
      }
  
 -- 
-2.56.0
+2.56.1
 

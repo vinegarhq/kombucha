@@ -1,7 +1,7 @@
-From 6b9f6d7c65d4ac3db66492695af3df7c69f12849 Mon Sep 17 00:00:00 2001
+From 96d997a65c059b3d1961371579f25b848e402c45 Mon Sep 17 00:00:00 2001
 From: Andrea Faulds <ajf@ajf.me>
 Date: Fri, 21 Aug 2026 01:47:05 +0200
-Subject: [PATCH 03/17] explorer: Account for the actual size of the taskbar if
+Subject: [PATCH 02/17] explorer: Account for the actual size of the taskbar if
  it is visible
 
 This means that, in desktop mode, appbars like the Microsoft Office
@@ -16,7 +16,7 @@ Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/11699
  4 files changed, 29 insertions(+), 6 deletions(-)
 
 diff --git a/programs/explorer/appbar.c b/programs/explorer/appbar.c
-index 18b125257ee..eb4aec42e8a 100644
+index 18b1252..eb4aec4 100644
 --- a/programs/explorer/appbar.c
 +++ b/programs/explorer/appbar.c
 @@ -99,10 +99,30 @@ static void send_poschanged(HWND hwnd)
@@ -63,7 +63,7 @@ index 18b125257ee..eb4aec42e8a 100644
          return TRUE;
      case ABM_ACTIVATE:
 diff --git a/programs/explorer/desktop.c b/programs/explorer/desktop.c
-index ce70c5dd79d..4f52b93afc7 100644
+index ce70c5d..4f52b93 100644
 --- a/programs/explorer/desktop.c
 +++ b/programs/explorer/desktop.c
 @@ -1288,9 +1288,8 @@ void manage_desktop( WCHAR *arg )
@@ -78,7 +78,7 @@ index ce70c5dd79d..4f52b93afc7 100644
  
          if ((shell32 = LoadLibraryW( L"shell32.dll" )) &&
 diff --git a/programs/explorer/explorer_private.h b/programs/explorer/explorer_private.h
-index 10e8aa0653f..443b8fcaee9 100644
+index 10e8aa0..443b8fc 100644
 --- a/programs/explorer/explorer_private.h
 +++ b/programs/explorer/explorer_private.h
 @@ -27,5 +27,6 @@ extern void initialize_appbar(void);
@@ -89,7 +89,7 @@ index 10e8aa0653f..443b8fcaee9 100644
  
  #endif  /* __WINE_EXPLORER_PRIVATE_H */
 diff --git a/programs/explorer/systray.c b/programs/explorer/systray.c
-index 69d3ec61b6a..175bc4d13a0 100644
+index 69d3ec6..175bc4d 100644
 --- a/programs/explorer/systray.c
 +++ b/programs/explorer/systray.c
 @@ -1097,6 +1097,12 @@ static void do_show_systray(void)
@@ -106,5 +106,5 @@ index 69d3ec61b6a..175bc4d13a0 100644
  {
      switch (msg)
 -- 
-2.56.0
+2.56.1
 

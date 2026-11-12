@@ -1,7 +1,7 @@
-From ce3d74069002778c73bc10f2d5c6f9872e0f7600 Mon Sep 17 00:00:00 2001
+From 2c71c6ebfd6ae7356befc4587ab9a9a7748fcb9d Mon Sep 17 00:00:00 2001
 From: Andrea Faulds <ajf@ajf.me>
 Date: Fri, 21 Aug 2026 01:47:27 +0200
-Subject: [PATCH 04/17] explorer: Update system work area rect to exclude
+Subject: [PATCH 03/17] explorer: Update system work area rect to exclude
  taskbar and appbars
 
 Without this, while appbars are positioned correctly, maximized windows
@@ -18,7 +18,7 @@ Source: https://gitlab.winehq.org/wine/wine/-/merge_requests/11699
  1 file changed, 26 insertions(+)
 
 diff --git a/programs/explorer/appbar.c b/programs/explorer/appbar.c
-index eb4aec42e8a..1e856240599 100644
+index eb4aec4..1e85624 100644
 --- a/programs/explorer/appbar.c
 +++ b/programs/explorer/appbar.c
 @@ -152,6 +152,26 @@ static void appbar_cliprect( HWND hwnd, RECT *rect )
@@ -74,5 +74,5 @@ index eb4aec42e8a..1e856240599 100644
 +    update_work_area();
  }
 -- 
-2.56.0
+2.56.1
 
