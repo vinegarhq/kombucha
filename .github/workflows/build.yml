@@ -2,11 +2,6 @@ name: Build Kombucha
 on:
   workflow_dispatch:
     inputs:
-      patchset:
-        type: choice
-        options:
-          - stable
-          - proton
       commit:
         type: string
         default: 2528aff26208257fdbf980666a4f0e66d47563ce
@@ -23,12 +18,7 @@ jobs:
 
       - name: Set Release Tag
         run: |
-          case ${{ inputs.patchset }} in
-            stable)
-              echo "TAG=${{ inputs.patchset }}+$(date --utc +%Y%m%d%H%M%S)" >> $GITHUB_ENV ;;
-            *)
-              echo "TAG=${{ inputs.patchset }}" >> $GITHUB_ENV
-          esac
+          echo "TAG=$(date --utc +%Y%m%d%H%M%S)" >> $GITHUB_ENV
 
       - name: Install Build Dependencies
         run: |
@@ -82,21 +72,14 @@ jobs:
 
       - name: Fetch Sources
         run: |
-          case ${{ inputs.patchset }} in
-            proton)
-              export ORGANIZATION="ValveSoftware" ;;
-            *)
-              export ORGANIZATION="wine-mirror"
-          esac
-
-          git clone https://github.com/${ORGANIZATION}/wine.git --depth 1 \
+          git clone https://gitlab.winehq.org/wine/wine.git --depth 1 \
             --revision=${{ inputs.commit }}
 
       - name: Apply Patches
         run: |
           echo "INSTALL=$GITHUB_WORKSPACE/kombucha" >> $GITHUB_ENV
 
-          git -C wine apply "$GITHUB_WORKSPACE"/patches/${{ inputs.patchset }}/*.patch
+          git -C wine apply "$GITHUB_WORKSPACE"/patches/*.patch
 
       # Compiler/linker flags:
       # https://gitlab.com/freedesktop-sdk/freedesktop-sdk/-/blob/master/include/flags.yml
@@ -105,21 +88,11 @@ jobs:
       - name: Configure Wine
         working-directory: wine
         run: |
-          case ${{ inputs.patchset }} in
-            stable)
-              export x86_64_CC="ccache x86_64-w64-mingw32-clang"
-              export x86_64_CCX="ccache x86_64-w64-mingw32-clang++"
-              export CC="ccache clang"
-              export CXX="ccache clang++"
-              export x86_64_LDFLAGS="-fuse-ld=lld" ;;
-            *)
-              export x86_64_CC="ccache x86_64-w64-mingw32-gcc"
-              export x86_64_CCX="ccache x86_64-w64-mingw32-g++"
-              export CC="ccache gcc"
-              export CXX="ccache g++"
-              export x86_64_LDFLAGS="-fuse-ld=ld"
-          esac
-
+          export x86_64_CC="ccache x86_64-w64-mingw32-clang"
+          export x86_64_CCX="ccache x86_64-w64-mingw32-clang++"
+          export CC="ccache clang"
+          export CXX="ccache clang++"
+          export x86_64_LDFLAGS="-fuse-ld=lld"
           export x86_64_CFLAGS="-O2 -pipe -g0"
           export x86_64_CXXFLAGS="${x86_64_CFLAGS}"
           export CFLAGS="${x86_64_CFLAGS} -Wp,-D_FORTIFY_SOURCE=0 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
@@ -127,7 +100,6 @@ jobs:
           export LDFLAGS="-Wl,--as-needed -Wl,-z,relro,-z,now"
 
           mkdir -vp ${{ env.INSTALL }}
-          [ ${{ inputs.patchset }} = proton ] && ./autogen.sh
           ./configure \
             --enable-archs=x86_64 \
             --prefix=${{ env.INSTALL }} \
@@ -595,12 +567,4 @@ jobs:
           strip -v --strip-unneeded "${NAME}"/bin/* "${NAME}"/lib/wine/*/*
           XZ_OPT=-9 tar -vJcf "${NAME}.tar.xz" "${NAME}"
 
-          case ${{ inputs.patchset }} in
-            proton)
-              export WINE_VERSION="Proton-Wine" ;;
-            *)
-              export WINE_VERSION="Wine"
-          esac
-
-          [ ${{ inputs.patchset }} = proton ] && gh release delete --cleanup-tag "${TAG}"
-          gh release create --notes "Built from ${WINE_VERSION} commit ${{ inputs.commit }}." --prerelease --title "${TAG}" "${TAG}" "${NAME}.tar.xz"
+          gh release create --notes "Built from Wine commit ${{ inputs.commit }}." --prerelease --title "${TAG}" "${TAG}" "${NAME}.tar.xz"
