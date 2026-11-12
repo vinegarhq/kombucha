@@ -7,7 +7,7 @@ on:
         options:
           - stable
           - unstable
-          - proton-unstable
+          - proton
       commit:
         type: string
         default: 2528aff26208257fdbf980666a4f0e66d47563ce
@@ -84,7 +84,7 @@ jobs:
       - name: Fetch Sources
         run: |
           case ${{ inputs.patchset }} in
-            proton-unstable)
+            proton)
               export ORGANIZATION="ValveSoftware" ;;
             *)
               export ORGANIZATION="wine-mirror"
@@ -128,7 +128,7 @@ jobs:
           export LDFLAGS="-Wl,--as-needed -Wl,-z,relro,-z,now"
 
           mkdir -vp ${{ env.INSTALL }}
-          [ ${{ inputs.patchset }} = proton-unstable ] && ./autogen.sh
+          [ ${{ inputs.patchset }} = proton ] && ./autogen.sh
           ./configure \
             --enable-archs=x86_64 \
             --prefix=${{ env.INSTALL }} \
@@ -597,11 +597,11 @@ jobs:
           XZ_OPT=-9 tar -vJcf "${NAME}.tar.xz" "${NAME}"
 
           case ${{ inputs.patchset }} in
-            proton-unstable)
+            proton)
               export WINE_VERSION="Proton-Wine" ;;
             *)
               export WINE_VERSION="Wine"
           esac
 
-          [ ${{ inputs.patchset }} = unstable ] || [ ${{ inputs.patchset }} = proton-unstable ] && gh release delete --cleanup-tag "${TAG}"
+          [ ${{ inputs.patchset }} = unstable ] || [ ${{ inputs.patchset }} = proton ] && gh release delete --cleanup-tag "${TAG}"
           gh release create --notes "Built from ${WINE_VERSION} commit ${{ inputs.commit }}." --prerelease --title "${TAG}" "${TAG}" "${NAME}.tar.xz"
