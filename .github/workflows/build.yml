@@ -6,7 +6,6 @@ on:
         type: choice
         options:
           - stable
-          - unstable
           - proton
       commit:
         type: string
@@ -107,7 +106,7 @@ jobs:
         working-directory: wine
         run: |
           case ${{ inputs.patchset }} in
-            stable|unstable)
+            stable)
               export x86_64_CC="ccache x86_64-w64-mingw32-clang"
               export x86_64_CCX="ccache x86_64-w64-mingw32-clang++"
               export CC="ccache clang"
@@ -603,5 +602,5 @@ jobs:
               export WINE_VERSION="Wine"
           esac
 
-          [ ${{ inputs.patchset }} = unstable ] || [ ${{ inputs.patchset }} = proton ] && gh release delete --cleanup-tag "${TAG}"
+          [ ${{ inputs.patchset }} = proton ] && gh release delete --cleanup-tag "${TAG}"
           gh release create --notes "Built from ${WINE_VERSION} commit ${{ inputs.commit }}." --prerelease --title "${TAG}" "${TAG}" "${NAME}.tar.xz"
