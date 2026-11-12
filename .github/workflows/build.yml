@@ -559,6 +559,13 @@ jobs:
         working-directory: wine
         run: make install-lib
 
+      # Required for act's --reuse option
+      - name: Clean up workspace
+        if: ${{ env.ACT }}
+        run: |
+          rm -vrf wine
+          rm -vrf llvm-mingw-*-ucrt-ubuntu-22.04-x86_64*
+
       - name: Strip unnecessary components
         run: |
           mv -v "${{ env.INSTALL }}" "${{ env.NAME }}"
