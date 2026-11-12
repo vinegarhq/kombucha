@@ -68,17 +68,17 @@ jobs:
             wget
 
       - name: Setup NTSync header
-        run: sudo cp /usr/src/linux-headers-6.14.*/include/uapi/linux/ntsync.h /usr/include/linux
+        run: sudo cp -v /usr/src/linux-headers-6.14.*/include/uapi/linux/ntsync.h /usr/include/linux
 
       - name: Fetch latest LLVM toolchains
         run: |
           export LLVM_MINGW_VERSION="20261104"
 
-          wget https://apt.llvm.org/llvm.sh
-          chmod +x llvm.sh
+          wget -v https://apt.llvm.org/llvm.sh
+          chmod -v +x llvm.sh
           sudo ./llvm.sh 23
-          wget https://github.com/mstorsjo/llvm-mingw/releases/download/${LLVM_MINGW_VERSION}/llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-ubuntu-22.04-x86_64.tar.xz
-          tar xf ./llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-ubuntu-22.04-x86_64.tar.xz
+          wget -v https://github.com/mstorsjo/llvm-mingw/releases/download/${LLVM_MINGW_VERSION}/llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-ubuntu-22.04-x86_64.tar.xz
+          tar -vxf ./llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-ubuntu-22.04-x86_64.tar.xz
           echo "$PWD/llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-ubuntu-22.04-x86_64/bin:$GITHUB_PATH" >> $GITHUB_PATH
 
       - name: Fetch Sources
@@ -127,7 +127,7 @@ jobs:
           export CXXFLAGS="${CFLAGS}"
           export LDFLAGS="-Wl,--as-needed -Wl,-z,relro,-z,now"
 
-          mkdir -p ${{ env.INSTALL }}
+          mkdir -vp ${{ env.INSTALL }}
           [ ${{ inputs.patchset }} = proton-unstable ] && ./autogen.sh
           ./configure \
             --enable-archs=x86_64 \
@@ -591,10 +591,10 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: |
           export NAME="kombucha-${{ env.TAG }}"
-          mv "${{ env.INSTALL }}" "${NAME}"
-          rm -rf "${NAME}"/share/{applications,man}
-          strip --strip-unneeded "${NAME}"/bin/* "${NAME}"/lib/wine/*/*
-          XZ_OPT=-9 tar -Jcf "${NAME}.tar.xz" "${NAME}"
+          mv -v "${{ env.INSTALL }}" "${NAME}"
+          rm -vrf "${NAME}"/share/{applications,man}
+          strip -v --strip-unneeded "${NAME}"/bin/* "${NAME}"/lib/wine/*/*
+          XZ_OPT=-9 tar -vJcf "${NAME}.tar.xz" "${NAME}"
 
           case ${{ inputs.patchset }} in
             proton-unstable)
