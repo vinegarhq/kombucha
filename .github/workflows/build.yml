@@ -18,7 +18,9 @@ jobs:
 
       - name: Set Release Tag
         run: |
-          echo "TAG=$(date --utc +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+          export TAG="$(date --utc +%Y%m%d%H%M%S)"
+          echo "TAG=${TAG}" >> $GITHUB_ENV
+          echo "NAME=kombucha-${TAG}" >> $GITHUB_ENV
 
       - name: Install Build Dependencies
         run: |
@@ -546,6 +548,7 @@ jobs:
             --disable-wow64win
 
       - name: Configure Ccache
+        if: ${{ !env.ACT }}
         uses: hendrikmuhs/ccache-action@v1.2
 
       - name: Build Wine
@@ -556,15 +559,17 @@ jobs:
         working-directory: wine
         run: make install-lib
 
+      - name: Strip unnecessary components
+        run: |
+          mv -v "${{ env.INSTALL }}" "${{ env.NAME }}"
+          rm -vrf "${{ env.NAME }}"/share/{applications,man}
+          strip -v --strip-unneeded "${{ env.NAME }}"/bin/* "${{ env.NAME }}"/lib/wine/*/*
+
       - name: Publish
+        if: ${{ !env.ACT }}
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          export NAME="kombucha-${{ env.TAG }}"
-          mv -v "${{ env.INSTALL }}" "${NAME}"
-          rm -vrf "${NAME}"/share/{applications,man}
-          strip -v --strip-unneeded "${NAME}"/bin/* "${NAME}"/lib/wine/*/*
-          XZ_OPT=-9 tar -vJcf "${NAME}.tar.xz" "${NAME}"
-
-          gh release create --notes "Built from Wine commit ${{ inputs.commit }}." --prerelease --title "${TAG}" "${TAG}" "${NAME}.tar.xz"
+          XZ_OPT=-9 tar -vJcf "${{ env.NAME }}.tar.xz" "${{ env.NAME }}"
+          gh release create --notes "Built from Wine commit ${{ inputs.commit }}." --prerelease --title "${{ env.TAG }}" "${{ env.TAG }}" "${{ env.NAME }}.tar.xz"
